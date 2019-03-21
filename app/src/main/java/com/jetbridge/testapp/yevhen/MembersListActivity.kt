@@ -3,6 +3,7 @@ package com.jetbridge.testapp.yevhen
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
@@ -16,9 +17,10 @@ const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 
 @SuppressLint("CheckResult")
 class MembersListActivity : AppCompatActivity(), MembersListView {
-
-    lateinit var binding: ActivityMembersListBinding
-    lateinit var presenter: MembersListPresenter
+    private lateinit var binding: ActivityMembersListBinding
+    private lateinit var presenter: MembersListPresenter
+    private var tuneToCancel: AnimatedVectorDrawableCompat? = null
+    private var cancelToTune: AnimatedVectorDrawableCompat? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,16 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
         binding.rvTeamMembers.layoutManager = LinearLayoutManager(this)
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(emptyList())
+
+        // init animated drawables (switching state of filter actionbar button)
+        tuneToCancel = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_tune_to_cancel)
+        cancelToTune = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_cancel_to_tune)
+        // init appbar header text switching animations
+        binding.tsHeader.setInAnimation(this, android.R.anim.slide_in_left)
+        binding.tsHeader.setOutAnimation(this, android.R.anim.slide_out_right)
+
+        binding.btnFilterOpenCancel.setOnClickListener { presenter.onFilterClick() }
+        binding.btnFilterAccept.setOnClickListener { presenter.onFilterAcceptClick(obtainFilterFromViews()) }
 
         presenter.start()
     }
@@ -64,10 +76,29 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.containerRvTeamMembers.visibility = View.VISIBLE
     }
 
+    override fun setActionBarButtonsEnabled(enabled: Boolean) {
+        binding.btnFilterAccept.isEnabled = enabled
+        binding.btnFilterOpenCancel.isEnabled = enabled
+    }
+
+    override fun hideFilter() {
+        binding.tsHeader.setText(getString(R.string.appbar_header_team_members))
+        binding.btnFilterOpenCancel.setImageDrawable(tuneToCancel)
+        tuneToCancel?.start()
+        binding.btnFilterAccept.visibility = View.INVISIBLE
+    }
+
     override fun displayFilter(filter: TeamMemberFilter,
                                skills: List<String>,
-                               projects: List<ProjectEntity>): Completable {
-        return Completable.complete()
+                               projects: List<ProjectEntity>) {
+        binding.tsHeader.setText(getString(R.string.appbar_header_select_filter))
+        binding.btnFilterOpenCancel.setImageDrawable(cancelToTune)
+        cancelToTune?.start()
+        binding.btnFilterAccept.visibility = View.VISIBLE
+    }
+
+    private fun obtainFilterFromViews(): TeamMemberFilter {
+        return TeamMemberFilter()
     }
 }
 

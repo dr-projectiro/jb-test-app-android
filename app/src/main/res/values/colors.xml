@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--common colors-->
     <color name="colorPrimary">#6200ee</color>
     <color name="colorPrimaryDark">#6200ee</color>
     <color name="colorAccent">#7f3be2</color>
+    <color name="white">#ffffff</color>
+    <color name="appbar_button_ripple_color">#9e7de0</color>
 
     <!--team members list-->
-    <color name="team_members_skroll_upper_bounds_separator">#000000</color>
+    <color name="team_members_scroll_upper_bounds_separator">#000000</color>
+
 </resources>
