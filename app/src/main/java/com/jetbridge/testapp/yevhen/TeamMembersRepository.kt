@@ -22,13 +22,13 @@ const val MAX_PAGE_LIMIT = 15000
 
 class TeamMembersRepository(apiBaseUrl: String) {
 
-    val backendApi = createBackendApi(apiBaseUrl)
+    private val backendApi = createBackendApi(apiBaseUrl)
 
     fun getAllProjects() {
         TODO("reuse data source")
     }
 
-    fun getAllTeamMembers(filter: TeamMemberFilter) =
+    fun getAllTeamMembers(filter: TeamMemberFilter = TeamMemberFilter()) =
         object : DataSource.Factory<Int, TeamMemberEntity>() {
             override fun create(): DataSource<Int, TeamMemberEntity> =
                 TeamMembersDataSource(backendApi, filter)
@@ -85,7 +85,6 @@ class TeamMembersDataSource(val backendApi: BackendApi, val filter: TeamMemberFi
         loadPage({ data, nextPage ->
             callback.onResult(data, nextPage)
         }, params.key)
-
     }
 
     override fun loadBefore(params: LoadParams<Int>,
@@ -148,9 +147,8 @@ data class TeamMemberFilter(
     val onHolidaysNow: Boolean? = null,
     val workingNow: Boolean? = null,
     val projectId: Int? = null,
-    val skillCombinationOperator: BooleanOp?,
-    val skills: List<String>? = null,
-    val currentTimeMillis: Long)
+    val skillCombinationOperator: BooleanOp? = null,
+    val skills: List<String>? = null)
 
 class ProjectsDataPage(
     override val items: List<ProjectEntity>,
