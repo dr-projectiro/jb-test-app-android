@@ -10,6 +10,12 @@ import com.jetbridge.testapp.yevhen.databinding.ItemTeamMemberBinding
 class TeamMembersListAdapter(val data: List<TeamMemberEntity>)
     : RecyclerView.Adapter<TeamMembersListAdapter.TeamMemberHolder>() {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long = data[position].id.toLong()
+
     override fun getItemCount() = data.size
 
     override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): TeamMemberHolder {

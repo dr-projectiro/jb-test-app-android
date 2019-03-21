@@ -35,7 +35,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         return Completable.create { emitter ->
             binding.pbLoadingProgress.visibility = View.VISIBLE
             binding.tvDataLoadingLabel.visibility = View.VISIBLE
-            binding.rvTeamMembers.visibility = View.INVISIBLE
+            binding.containerRvTeamMembers.visibility = View.INVISIBLE
             binding.tvSubtitle.visibility = View.INVISIBLE
             binding.upperTeamDataSeparator.visibility = View.INVISIBLE
             val anim = ProgressBarAnimation(binding.pbLoadingProgress,
@@ -61,7 +61,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.tvDataLoadingLabel.visibility = View.INVISIBLE
         binding.pbLoadingProgress.progress = 0
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers)
-        binding.rvTeamMembers.visibility = View.VISIBLE
+        binding.containerRvTeamMembers.visibility = View.VISIBLE
     }
 
     override fun displayFilter(filter: TeamMemberFilter,
