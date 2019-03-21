@@ -1,20 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".MembersListActivity">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_team_members"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <FrameLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="TEST TEXT" />
+
+            <!--shrunk appbar-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/appbar_shrunk"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="q" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <!--expanded (with filters) appbar-->
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/appbar_expanded_with_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="q" />
+            </android.support.constraint.ConstraintLayout>
+        </FrameLayout>
+
+        <!--team member list & loading indicator view-->
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ff00"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintTop_toTopOf="@id/appbar">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subtitle for data"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/upper_team_data_separator"
+                    android:layout_width="0dp"
+                    android:layout_height="2dp"
+                    android:background="@color/team_members_skroll_upper_bounds_separator"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_subtitle" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_team_members"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:animateLayoutChanges="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/upper_team_data_separator" />
+
+                <ProgressBar
+                    android:id="@+id/pb_loading_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="168dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:animateLayoutChanges="true"
+                    android:max="100"
+                    android:progress="0"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_data_loading_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:text="Your data is loading"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pb_loading_progress" />
+
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 </layout>

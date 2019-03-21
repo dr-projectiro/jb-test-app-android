@@ -1,17 +1,16 @@
 package com.jetbridge.testapp.yevhen
 
-import android.arch.paging.PagedListAdapter
 import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemTeamMemberBinding
 
 
-class TeamMembersListAdapter
-    : PagedListAdapter<TeamMemberEntity, TeamMembersListAdapter.TeamMemberHolder>(DIFF_CALLBACK) {
+class TeamMembersListAdapter(val data: List<TeamMemberEntity>)
+    : RecyclerView.Adapter<TeamMembersListAdapter.TeamMemberHolder>() {
+
+    override fun getItemCount() = data.size
 
     override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): TeamMemberHolder {
         return TeamMemberHolder(DataBindingUtil.inflate(
@@ -20,25 +19,9 @@ class TeamMembersListAdapter
     }
 
     override fun onBindViewHolder(viewHolder: TeamMemberHolder, itemIndex: Int) {
-        viewHolder.binding.tvTempName.text = getItem(itemIndex)?.firstName ?: "NULL"
+        viewHolder.binding.tvTempName.text = data[itemIndex].firstName
     }
 
     inner class TeamMemberHolder(val binding: ItemTeamMemberBinding)
         : RecyclerView.ViewHolder(binding.root)
-
-    companion object {
-
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<TeamMemberEntity> =
-            object : DiffUtil.ItemCallback<TeamMemberEntity>() {
-                override fun areItemsTheSame(
-                    item1: TeamMemberEntity, item2: TeamMemberEntity): Boolean {
-                    return item1.id == item2.id
-                }
-
-                override fun areContentsTheSame(
-                    item1: TeamMemberEntity, item2: TeamMemberEntity): Boolean {
-                    return item1 == item2
-                }
-            }
-    }
 }

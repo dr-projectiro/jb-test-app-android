@@ -24,15 +24,11 @@ class TeamMembersRepository(apiBaseUrl: String) {
 
     fun getAllProjects() = mergePages { page -> backendApi.getProjectsPage(page).execute() }
 
-    fun getAllTeamMembers(skills: List<String> = emptyList(),
-                          skillCombinationOp: BooleanOp?,
-                          projectId: Int? = null,
-                          onHolidays: Boolean? = null,
-                          isWorkingNow: Boolean? = null) =
+    fun getAllTeamMembers(filter: TeamMemberFilter = TeamMemberFilter()) =
         mergePages { page ->
             backendApi.getTeamMembersPage(
-                combineSkillsForHttpRequest(skills, skillCombinationOp),
-                projectId, onHolidays, isWorkingNow, page).execute()
+                combineSkillsForHttpRequest(filter.skills, filter.skillCombinationOperator),
+                filter.projectId, filter.onHolidaysNow, filter.workingNow, page).execute()
         }
 
     private fun changeTeamMemberProject(teamMemberId: Int, projectId: Int?) =
@@ -46,9 +42,11 @@ class TeamMembersRepository(apiBaseUrl: String) {
         .build()
         .create(BackendApi::class.java)
 
-    private fun combineSkillsForHttpRequest(listOfSkills: List<String>,
+    private fun combineSkillsForHttpRequest(listOfSkills: List<String>?,
                                             skillCombinationOp: BooleanOp?) =
-        when (skillCombinationOp) {
+        if (listOfSkills == null)
+            emptyList()
+        else when (skillCombinationOp) {
             null -> emptyList()
             BooleanOp.AND -> listOfSkills // to get request like /team?skill=a&skill=b&skill=c
             BooleanOp.OR -> listOf(Gson().toJson(listOfSkills)) // to get /team?skill=[a, b, c]
@@ -78,7 +76,6 @@ class TeamMembersRepository(apiBaseUrl: String) {
         .build()
 }
 
-
 interface BackendApi {
     @GET("/projects?page")
     fun getProjectsPage(@Query("page") page: Int? = null)
@@ -98,6 +95,13 @@ interface BackendApi {
         @Path("teamMemberId") teamMemberId: Int,
         @Body projectId: Int): Single<Boolean>
 }
+
+data class TeamMemberFilter(
+    val onHolidaysNow: Boolean? = null,
+    val workingNow: Boolean? = null,
+    val projectId: Int? = null,
+    val skillCombinationOperator: BooleanOp? = null,
+    val skills: List<String>? = null)
 
 interface DataPage<T> {
     val items: List<T> get() = throw NotImplementedError()
