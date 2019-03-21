@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
+        android:animateLayoutChanges="true"
         tools:context=".MembersListActivity">
 
         <!--appbar-->
@@ -25,20 +26,18 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
+                    style="@style/AppTheme.AppbarHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_mid"
-                    android:text="@string/appbar_header_team_members"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/appbar_text_size" />
+                    android:text="@string/appbar_header_team_members" />
 
                 <TextView
+                    style="@style/AppTheme.AppbarHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_mid"
-                    android:text="@string/appbar_header_select_filter"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/appbar_text_size" />
+                    android:text="@string/appbar_header_select_filter" />
             </TextSwitcher>
 
             <ImageButton
@@ -73,16 +72,51 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/tv_skills_header"
+                style="@style/AppTheme.FilterSubHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="q" />
+                android:layout_marginStart="@dimen/margin_mid"
+                android:text="@string/skills_filter_header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RadioButton
+                android:id="@+id/rb_filter_no_skills"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:text="@string/filter_no_skills"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+
+            <RadioButton
+                android:id="@+id/rb_filter_all_skills"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_all_of_skills"
+                app:layout_constraintEnd_toStartOf="@id/rb_filter_any_skills"
+                app:layout_constraintStart_toEndOf="@id/rb_filter_no_skills"
+                app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+
+            <RadioButton
+                android:id="@+id/rb_filter_any_skills"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_any_of_skills"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rb_filter_all_skills"
+                app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+
         </android.support.constraint.ConstraintLayout>
 
         <!--team member list & loading indicator view-->
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00ff00"
             app:cardCornerRadius="12dp"
             app:layout_constraintTop_toBottomOf="@id/cnt_filter">
 

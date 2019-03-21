@@ -13,4 +13,20 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
     </style>
+
+    <style name="AppTheme.AppbarHeader">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/appbar_text_size</item>
+    </style>
+
+    <style name="AppTheme.FilterSubHeader">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppTheme.FilterRadioButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="buttonTint">@color/white</item>
+    </style>
 </resources>

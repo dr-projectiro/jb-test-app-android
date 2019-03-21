@@ -12,6 +12,7 @@ import io.reactivex.Completable
 import android.widget.ProgressBar
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.widget.RadioButton
 
 const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 
@@ -19,6 +20,7 @@ const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 class MembersListActivity : AppCompatActivity(), MembersListView {
     private lateinit var binding: ActivityMembersListBinding
     private lateinit var presenter: MembersListPresenter
+    private lateinit var radioButtons: List<RadioButton>
     private var tuneToCancel: AnimatedVectorDrawableCompat? = null
     private var cancelToTune: AnimatedVectorDrawableCompat? = null
 
@@ -34,12 +36,21 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         tuneToCancel = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_tune_to_cancel)
         cancelToTune = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_cancel_to_tune)
         // init appbar header text switching animations
-        binding.tsHeader.setInAnimation(this, android.R.anim.slide_in_left)
-        binding.tsHeader.setOutAnimation(this, android.R.anim.slide_out_right)
+        binding.tsHeader.setInAnimation(this, R.anim.anim_slow_fade_in)
+        binding.tsHeader.setOutAnimation(this, R.anim.anim_fast_fade_out)
 
         binding.btnFilterOpenCancel.setOnClickListener { presenter.onFilterClick() }
         binding.btnFilterAccept.setOnClickListener { presenter.onFilterAcceptClick(obtainFilterFromViews()) }
 
+        // setup radio buttons
+        radioButtons = listOf(binding.rbFilterAllSkills, binding.rbFilterAnySkills, binding.rbFilterNoSkills)
+        radioButtons.forEach { rb ->
+            rb.setOnClickListener {
+                radioButtons.minus(rb).forEach { otherRb -> otherRb.isChecked = false }
+            }
+        }
+
+        // load initial data
         presenter.start()
     }
 
@@ -86,6 +97,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.btnFilterOpenCancel.setImageDrawable(tuneToCancel)
         tuneToCancel?.start()
         binding.btnFilterAccept.visibility = View.INVISIBLE
+        binding.cntFilter.visibility = View.GONE
     }
 
     override fun displayFilter(filter: TeamMemberFilter,
@@ -95,6 +107,11 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.btnFilterOpenCancel.setImageDrawable(cancelToTune)
         cancelToTune?.start()
         binding.btnFilterAccept.visibility = View.VISIBLE
+        binding.cntFilter.visibility = View.VISIBLE
+        // setup radio buttons
+        binding.rbFilterAllSkills.isChecked = filter.skillCombinationOperator == BooleanOp.AND
+        binding.rbFilterAnySkills.isChecked = filter.skillCombinationOperator == BooleanOp.OR
+        binding.rbFilterNoSkills.isChecked = filter.skillCombinationOperator == null
     }
 
     private fun obtainFilterFromViews(): TeamMemberFilter {
