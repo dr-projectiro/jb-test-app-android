@@ -1,8 +1,5 @@
 package com.jetbridge.testapp.yevhen
 
-import android.annotation.SuppressLint
-import android.arch.paging.DataSource
-import android.arch.paging.PageKeyedDataSource
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Observable
@@ -10,6 +7,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,16 +20,19 @@ const val MAX_PAGE_LIMIT = 15000
 
 class TeamMembersRepository(apiBaseUrl: String) {
 
-    private val backendApi = createBackendApi(apiBaseUrl)
+    val backendApi = createBackendApi(apiBaseUrl)
 
-    fun getAllProjects() {
-        TODO("reuse data source")
-    }
+    fun getAllProjects() = mergePages { page -> backendApi.getProjectsPage(page).execute() }
 
-    fun getAllTeamMembers(filter: TeamMemberFilter = TeamMemberFilter()) =
-        object : DataSource.Factory<Int, TeamMemberEntity>() {
-            override fun create(): DataSource<Int, TeamMemberEntity> =
-                TeamMembersDataSource(backendApi, filter)
+    fun getAllTeamMembers(skills: List<String> = emptyList(),
+                          skillCombinationOp: BooleanOp?,
+                          projectId: Int? = null,
+                          onHolidays: Boolean? = null,
+                          isWorkingNow: Boolean? = null) =
+        mergePages { page ->
+            backendApi.getTeamMembersPage(
+                combineSkillsForHttpRequest(skills, skillCombinationOp),
+                projectId, onHolidays, isWorkingNow, page).execute()
         }
 
     private fun changeTeamMemberProject(teamMemberId: Int, projectId: Int?) =
@@ -44,6 +45,14 @@ class TeamMembersRepository(apiBaseUrl: String) {
         .client(buildHttpClient())
         .build()
         .create(BackendApi::class.java)
+
+    private fun combineSkillsForHttpRequest(listOfSkills: List<String>,
+                                            skillCombinationOp: BooleanOp?) =
+        when (skillCombinationOp) {
+            null -> emptyList()
+            BooleanOp.AND -> listOfSkills // to get request like /team?skill=a&skill=b&skill=c
+            BooleanOp.OR -> listOf(Gson().toJson(listOfSkills)) // to get /team?skill=[a, b, c]
+        }
 
     private fun <T> mergePages(pageProvider: (Int) -> Response<out DataPage<T>>) =
         Observable.create<List<T>> { emitter ->
@@ -69,57 +78,11 @@ class TeamMembersRepository(apiBaseUrl: String) {
         .build()
 }
 
-@SuppressLint("CheckResult")
-class TeamMembersDataSource(val backendApi: BackendApi, val filter: TeamMemberFilter) :
-    PageKeyedDataSource<Int, TeamMemberEntity>() {
-
-    override fun loadInitial(params: LoadInitialParams<Int>,
-                             callback: LoadInitialCallback<Int, TeamMemberEntity>) {
-        loadPage({ data, nextPage ->
-            callback.onResult(data, null, nextPage)
-        }, 1)
-    }
-
-    override fun loadAfter(params: LoadParams<Int>,
-                           callback: LoadCallback<Int, TeamMemberEntity>) {
-        loadPage({ data, nextPage ->
-            callback.onResult(data, nextPage)
-        }, params.key)
-    }
-
-    override fun loadBefore(params: LoadParams<Int>,
-                            callback: LoadCallback<Int, TeamMemberEntity>) {
-    }
-
-    private fun loadPage(dataConsumer: (List<TeamMemberEntity>, Int?) -> Unit, pageNumber: Int) {
-        backendApi.getTeamMembersPage(
-            combineSkillsForHttpRequest(filter.skills, filter.skillCombinationOperator),
-            filter.projectId, filter.onHolidaysNow, filter.workingNow, pageNumber)
-            .subscribeOn(Schedulers.io()).subscribe({ pageData ->
-                dataConsumer.invoke(pageData.items, getNextPageNumber(pageData, pageNumber))
-            }, {
-                TODO("Handle api/network failures here")
-            })
-    }
-
-    private fun getNextPageNumber(pageData: TeamMembersDataPage, currentPageNumber: Int) =
-        if (pageData.hasNext) currentPageNumber + 1 else null
-
-    private fun combineSkillsForHttpRequest(listOfSkills: List<String>?,
-                                            skillCombinationOp: BooleanOp?) =
-        if (listOfSkills == null)
-            emptyList()
-        else when (skillCombinationOp) {
-            null -> emptyList()
-            BooleanOp.AND -> listOfSkills // to get request like /team?skill=a&skill=b&skill=c
-            BooleanOp.OR -> listOf(Gson().toJson(listOfSkills)) // to get /team?skill=[a, b, c]
-        }
-}
 
 interface BackendApi {
     @GET("/projects?page")
     fun getProjectsPage(@Query("page") page: Int? = null)
-        : Single<ProjectsDataPage>
+        : Call<ProjectsDataPage>
 
     @GET("/team")
     fun getTeamMembersPage(
@@ -128,7 +91,7 @@ interface BackendApi {
         @Query("holidays") onHolidays: Boolean? = null,
         @Query("holidays") isWorkingNow: Boolean? = null,
         @Query("page") page: Int? = null)
-        : Single<TeamMembersDataPage>
+        : Call<TeamMembersDataPage>
 
     @PUT("/team/{teamMemberId}/project")
     fun changeTeamMemberProject(
@@ -143,13 +106,6 @@ interface DataPage<T> {
     val page: Int get() = throw NotImplementedError()
 }
 
-data class TeamMemberFilter(
-    val onHolidaysNow: Boolean? = null,
-    val workingNow: Boolean? = null,
-    val projectId: Int? = null,
-    val skillCombinationOperator: BooleanOp? = null,
-    val skills: List<String>? = null)
-
 class ProjectsDataPage(
     override val items: List<ProjectEntity>,
     override val hasPrevious: Boolean,
@@ -161,6 +117,7 @@ class TeamMembersDataPage(
     override val hasPrevious: Boolean,
     override val hasNext: Boolean,
     override val page: Int) : DataPage<TeamMemberEntity>
+
 
 data class ManagerId(
     val id: Int,

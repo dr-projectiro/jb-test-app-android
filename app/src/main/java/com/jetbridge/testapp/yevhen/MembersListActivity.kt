@@ -20,15 +20,5 @@ class MembersListActivity : AppCompatActivity() {
         val adapter = TeamMembersListAdapter()
         binding.rvTeamMembers.layoutManager = LinearLayoutManager(this)
         binding.rvTeamMembers.adapter = adapter
-
-        LivePagedListBuilder(MainApp.repository.getAllTeamMembers(),
-            PagedList.Config.Builder()
-                .setPageSize(10)
-                .setPrefetchDistance(10)
-                .setEnablePlaceholders(false)
-                .build())
-            .build().observe(this, Observer {
-                adapter.submitList(it)
-            })
     }
 }
