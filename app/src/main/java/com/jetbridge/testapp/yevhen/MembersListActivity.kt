@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import com.jetbridge.testapp.yevhen.databinding.ActivityMembersListBinding
 import io.reactivex.Completable
@@ -49,6 +50,10 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
                 radioButtons.minus(rb).forEach { otherRb -> otherRb.isChecked = false }
             }
         }
+        // setup skills and project filter recyclerviews
+        binding.rvFilterSkills.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.HORIZONTAL, false)
+        (binding.rvFilterSkills.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = true
 
         // load initial data
         presenter.start()
@@ -112,6 +117,8 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.rbFilterAllSkills.isChecked = filter.skillCombinationOperator == BooleanOp.AND
         binding.rbFilterAnySkills.isChecked = filter.skillCombinationOperator == BooleanOp.OR
         binding.rbFilterNoSkills.isChecked = filter.skillCombinationOperator == null
+        // setup skills recyclerview
+        binding.rvFilterSkills.adapter = BubbleAdapter(skills, true)
     }
 
     private fun obtainFilterFromViews(): TeamMemberFilter {

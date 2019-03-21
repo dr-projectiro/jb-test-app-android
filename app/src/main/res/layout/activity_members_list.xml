@@ -5,9 +5,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:background="@color/colorPrimary"
         android:orientation="vertical"
-        android:animateLayoutChanges="true"
         tools:context=".MembersListActivity">
 
         <!--appbar-->
@@ -110,6 +110,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/rb_filter_all_skills"
                 app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_filter_skills"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bubble_option_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rb_filter_no_skills" />
 
         </android.support.constraint.ConstraintLayout>
 

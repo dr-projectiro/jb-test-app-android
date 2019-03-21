@@ -8,4 +8,6 @@
     <dimen name="margin_mid">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_large">24dp</dimen>
+
+    <dimen name="bubble_option_height">36dp</dimen>
 </resources>

@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemTeamMemberBinding
 
 
-class TeamMembersListAdapter(val data: List<TeamMemberEntity>)
-    : RecyclerView.Adapter<TeamMembersListAdapter.TeamMemberHolder>() {
+class TeamMembersListAdapter(private val data: List<TeamMemberEntity>)
+    : RecyclerView.Adapter<TeamMembersListAdapter.ViewHolder>() {
 
     init {
         setHasStableIds(true)
@@ -18,16 +18,16 @@ class TeamMembersListAdapter(val data: List<TeamMemberEntity>)
 
     override fun getItemCount() = data.size
 
-    override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): TeamMemberHolder {
-        return TeamMemberHolder(DataBindingUtil.inflate(
+    override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(DataBindingUtil.inflate(
             LayoutInflater.from(parentView.context),
             R.layout.item_team_member, parentView, false))
     }
 
-    override fun onBindViewHolder(viewHolder: TeamMemberHolder, itemIndex: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, itemIndex: Int) {
         viewHolder.binding.tvTempName.text = data[itemIndex].firstName
     }
 
-    inner class TeamMemberHolder(val binding: ItemTeamMemberBinding)
+    inner class ViewHolder(val binding: ItemTeamMemberBinding)
         : RecyclerView.ViewHolder(binding.root)
 }
