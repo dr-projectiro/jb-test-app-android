@@ -19,6 +19,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -43,6 +46,7 @@ dependencies {
     implementation "com.android.support:support-annotations:$appCompatVersion"
 
     implementation "android.arch.lifecycle:extensions:$lifecycleExtensionsVersion"
+    implementation "android.arch.paging:runtime:1.0.1"
     kapt "android.arch.lifecycle:compiler:$lifecycleExtensionsVersion"
 }
 repositories {
