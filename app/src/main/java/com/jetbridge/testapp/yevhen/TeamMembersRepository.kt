@@ -136,7 +136,10 @@ data class ProjectEntity(
     val id: Int,
 
     @SerializedName("project_name")
-    val projectName: String)
+    val projectName: String) : ReadableEntity {
+
+    override val readableText: String get() = projectName
+}
 
 data class WorkingHoursEntity(
     val timezone: String,

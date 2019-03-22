@@ -21,7 +21,6 @@ const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 class MembersListActivity : AppCompatActivity(), MembersListView {
     private lateinit var binding: ActivityMembersListBinding
     private lateinit var presenter: MembersListPresenter
-    private lateinit var radioButtons: List<RadioButton>
     private var tuneToCancel: AnimatedVectorDrawableCompat? = null
     private var cancelToTune: AnimatedVectorDrawableCompat? = null
 
@@ -44,19 +43,27 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.btnFilterAccept.setOnClickListener { presenter.onFilterAcceptClick(obtainFilterFromViews()) }
 
         // setup radio buttons
-        radioButtons = listOf(binding.rbFilterAllSkills, binding.rbFilterAnySkills, binding.rbFilterNoSkills)
+        joinRadioButtons(listOf(binding.rbFilterAllSkills,
+            binding.rbFilterAnySkills, binding.rbFilterNoSkills))
+        joinRadioButtons(listOf(binding.rbOnHolidaysNow,
+            binding.rbWorkingNow, binding.rbDontFilterAvailability))
+
+        // setup skills and project filter recycler views
+        binding.rvFilterSkills.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvFilterProjects.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.HORIZONTAL, false)
+
+        // load initial data
+        presenter.start()
+    }
+
+    private fun joinRadioButtons(radioButtons: List<RadioButton>) {
         radioButtons.forEach { rb ->
             rb.setOnClickListener {
                 radioButtons.minus(rb).forEach { otherRb -> otherRb.isChecked = false }
             }
         }
-        // setup skills and project filter recyclerviews
-        binding.rvFilterSkills.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.HORIZONTAL, false)
-        (binding.rvFilterSkills.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = true
-
-        // load initial data
-        presenter.start()
     }
 
     override fun displayLoadingProgress(percentage: Float): Completable {
@@ -113,12 +120,18 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         cancelToTune?.start()
         binding.btnFilterAccept.visibility = View.VISIBLE
         binding.cntFilter.visibility = View.VISIBLE
-        // setup radio buttons
+        // skills radio buttons
         binding.rbFilterAllSkills.isChecked = filter.skillCombinationOperator == BooleanOp.AND
         binding.rbFilterAnySkills.isChecked = filter.skillCombinationOperator == BooleanOp.OR
         binding.rbFilterNoSkills.isChecked = filter.skillCombinationOperator == null
+        // availability radio buttons
+        binding.rbWorkingNow.isChecked = filter.workingNow == true
+        binding.rbOnHolidaysNow.isChecked = filter.onHolidaysNow == true
+        binding.rbDontFilterAvailability.isChecked =
+            filter.workingNow != true && filter.onHolidaysNow != true
         // setup skills recyclerview
         binding.rvFilterSkills.adapter = BubbleAdapter(skills, true)
+        binding.rvFilterProjects.adapter = BubbleAdapter(projects, true)
     }
 
     private fun obtainFilterFromViews(): TeamMemberFilter {

@@ -71,6 +71,14 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
+            <View
+                android:id="@+id/top_filter_separator"
+                style="@style/AppTheme.FilterSeparator"
+                android:layout_width="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tv_skills_header"
                 style="@style/AppTheme.FilterSubHeader"
@@ -79,37 +87,37 @@
                 android:layout_marginStart="@dimen/margin_mid"
                 android:text="@string/skills_filter_header"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/top_filter_separator" />
 
             <RadioButton
                 android:id="@+id/rb_filter_no_skills"
                 style="@style/AppTheme.FilterRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_mid"
                 android:text="@string/filter_no_skills"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
 
             <RadioButton
                 android:id="@+id/rb_filter_all_skills"
                 style="@style/AppTheme.FilterRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_all_of_skills"
-                app:layout_constraintEnd_toStartOf="@id/rb_filter_any_skills"
-                app:layout_constraintStart_toEndOf="@id/rb_filter_no_skills"
-                app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rb_filter_no_skills" />
 
             <RadioButton
                 android:id="@+id/rb_filter_any_skills"
                 style="@style/AppTheme.FilterRadioButton"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/filter_any_of_skills"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/rb_filter_all_skills"
-                app:layout_constraintTop_toBottomOf="@id/tv_skills_header" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rb_filter_all_skills" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_filter_skills"
@@ -117,7 +125,81 @@
                 android:layout_height="@dimen/bubble_option_height"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rb_filter_no_skills" />
+                app:layout_constraintTop_toBottomOf="@id/rb_filter_any_skills" />
+
+            <View
+                android:id="@+id/skill_to_project_separator"
+                style="@style/AppTheme.FilterSeparator"
+                android:layout_width="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_filter_skills" />
+
+            <TextView
+                android:id="@+id/tv_projects_header"
+                style="@style/AppTheme.FilterSubHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:text="@string/projects_filter_header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/skill_to_project_separator" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_filter_projects"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bubble_option_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_projects_header" />
+
+            <View
+                android:id="@+id/projects_to_availability_separator"
+                style="@style/AppTheme.FilterSeparator"
+                android:layout_width="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_filter_projects" />
+
+            <TextView
+                android:id="@+id/tv_availability_header"
+                style="@style/AppTheme.FilterSubHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:text="@string/availability_filter_header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/projects_to_availability_separator" />
+
+            <RadioButton
+                android:id="@+id/rb_dont_filter_availability"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/dont_filter_availability"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_availability_header" />
+
+            <RadioButton
+                android:id="@+id/rb_on_holidays_now"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_on_holidays_now"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rb_dont_filter_availability" />
+
+            <RadioButton
+                android:id="@+id/rb_working_now"
+                style="@style/AppTheme.FilterRadioButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/filter_working_now"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rb_on_holidays_now" />
 
         </android.support.constraint.ConstraintLayout>
 
