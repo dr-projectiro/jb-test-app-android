@@ -44,6 +44,8 @@ class DetailedProfileActivity : AppCompatActivity() {
         projects = gson.fromJson<List<ProjectEntity>>(encodedProjects, object :
             TypeToken<List<ProjectEntity>>() {}.type)
 
+        displayProfileData()
+
         // create GUI bindings
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detailed_profile)
 
