@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemTeamMemberBinding
 import org.joda.time.DateTimeZone
+import org.joda.time.LocalDate
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
 import java.util.*
@@ -38,7 +39,8 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         viewHolder.binding.tvSkills.text = teamMember.skills.reduce { acc, skill -> "$acc, $skill" }
         colorizeAvatar(viewHolder.binding.ivAvatar, teamMember)
         // bind working hours
-        val isWorkingNow = isTeamMemberWorkingNow(teamMember.workingHours)
+        val isWorkingNow = isNowWorkingHours(teamMember.workingHours)
+            && !isOnHolidayNow(teamMember)
         viewHolder.binding.ivWorkingHours
             .setImageResource(if (isWorkingNow) R.drawable.ic_time else R.drawable.ic_time_off)
         viewHolder.binding.tvWorkingOrNotWorking
@@ -58,7 +60,7 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
                 if (teamMember.currentProject != null)
                     viewHolder.itemView.context
                         .getString(R.string.project_colon, teamMember.currentProject!!.projectName)
-            else viewHolder.itemView.context.getString(R.string.no_project)
+                else viewHolder.itemView.context.getString(R.string.no_project)
         } else {
             viewHolder.binding.tvProjectHeader.visibility = View.GONE
         }
@@ -69,7 +71,17 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         }
     }
 
-    private fun isTeamMemberWorkingNow(workingHours: WorkingHoursEntity): Boolean {
+    private fun isOnHolidayNow(teamMember: TeamMemberEntity): Boolean {
+        if (teamMember.onHolidaysTillIsoDate == null) {
+            return false
+        }
+        val nowLocalDate = LocalDate.now(DateTimeZone
+            .forTimeZone(TimeZone.getTimeZone(teamMember.workingHours.timezone)))
+        val lastHolidayDate = LocalDate.parse(teamMember.onHolidaysTillIsoDate)
+        return nowLocalDate.isBefore(lastHolidayDate.plusDays(1))
+    }
+
+    private fun isNowWorkingHours(workingHours: WorkingHoursEntity): Boolean {
         val currentTimeInWorkerTimeZone = LocalDateTime
             .now(DateTimeZone.forTimeZone(TimeZone.getTimeZone(workingHours.timezone))).toLocalTime()
         val workingHoursStart = LocalTime.parse(workingHours.startLocalIsoTime)

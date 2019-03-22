@@ -24,6 +24,8 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
     private lateinit var presenter: MembersListPresenter
     private var tuneToCancel: AnimatedVectorDrawableCompat? = null
     private var cancelToTune: AnimatedVectorDrawableCompat? = null
+    private lateinit var skillsFilterAdapter: BubbleAdapter<String>
+    private lateinit var projectsFilterAdapter: BubbleAdapter<ProjectEntity>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,14 +144,22 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.rbDontFilterAvailability.isChecked =
             filter.workingNow != true && filter.onHolidaysNow != true
         // setup skills recyclerview
-        binding.rvFilterSkills.adapter = BubbleAdapter(skills, true)
-        binding.rvFilterProjects.adapter = BubbleAdapter(projects, true)
+        skillsFilterAdapter = BubbleAdapter(
+            data = skills,
+            selectedData = filter.skills ?: emptyList(),
+            selectionEnabled = true)
+        projectsFilterAdapter = BubbleAdapter(
+            data = projects,
+            selectedData = filter.projects ?: emptyList(),
+            selectionEnabled = true)
+        binding.rvFilterSkills.adapter = skillsFilterAdapter
+        binding.rvFilterProjects.adapter = projectsFilterAdapter
     }
 
     private fun buildFilterDescriptionText(filter: TeamMemberFilter): String {
         val filteringOptions = mutableListOf<Int>().apply {
             if (filter.skillCombinationOperator != null) add(R.string.skills_filter_option)
-            if (filter.projectId != null) add(R.string.projects_filter_option)
+            if (filter.projects != null && filter.projects.isNotEmpty()) add(R.string.projects_filter_option)
             if (filter.onHolidaysNow != null) add(R.string.holidays_filter_option)
             if (filter.workingNow != null) add(R.string.work_time_filter_option)
         }.map { getString(it) }
@@ -159,8 +169,20 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
     }
 
     private fun obtainFilterFromViews(): TeamMemberFilter {
-        return TeamMemberFilter()
+        return TeamMemberFilter(
+            onHolidaysNow = if (binding.rbOnHolidaysNow.isChecked) true else null,
+            workingNow = if (binding.rbWorkingNow.isChecked) true else null,
+            projects = replaceEmptyToNull(projectsFilterAdapter.getSelectedData()),
+            skills = replaceEmptyToNull(skillsFilterAdapter.getSelectedData()),
+            skillCombinationOperator = when {
+                binding.rbFilterAnySkills.isChecked -> BooleanOp.OR
+                binding.rbFilterAllSkills.isChecked -> BooleanOp.AND
+                else -> null
+            })
     }
+
+    private fun <T> replaceEmptyToNull(data: List<T>?) =
+        if (data?.isEmpty() == true) null else data
 }
 
 class ProgressBarAnimation(private val progressBar: ProgressBar,

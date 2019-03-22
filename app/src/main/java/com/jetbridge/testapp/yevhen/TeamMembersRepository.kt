@@ -20,7 +20,8 @@ const val MAX_PAGE_LIMIT = 15000
 
 class TeamMembersRepository(apiBaseUrl: String) {
 
-    val backendApi = createBackendApi(apiBaseUrl)
+    private val backendApi = createBackendApi(apiBaseUrl)
+    private val gson = Gson()
 
     fun getAllProjects() = mergePages { page -> backendApi.getProjectsPage(page).execute() }
 
@@ -28,7 +29,8 @@ class TeamMembersRepository(apiBaseUrl: String) {
         mergePages { page ->
             backendApi.getTeamMembersPage(
                 combineSkillsForHttpRequest(filter.skills, filter.skillCombinationOperator),
-                filter.projectId, filter.onHolidaysNow, filter.workingNow, page).execute()
+                filter.projects?.let { it.map { it.id } }?.let { gson.toJson(it) },
+                filter.onHolidaysNow, filter.workingNow, page).execute()
         }
 
     private fun changeTeamMemberProject(teamMemberId: Int, projectId: Int?) =
@@ -84,7 +86,7 @@ interface BackendApi {
     @GET("/team")
     fun getTeamMembersPage(
         @Query("skill") skills: List<String> = emptyList(),
-        @Query("project") projectId: Int? = null,
+        @Query("project") projectsArray: String? = null,
         @Query("holidays") onHolidays: Boolean? = null,
         @Query("holidays") isWorkingNow: Boolean? = null,
         @Query("page") page: Int? = null)
@@ -99,7 +101,7 @@ interface BackendApi {
 data class TeamMemberFilter(
     val onHolidaysNow: Boolean? = null,
     val workingNow: Boolean? = null,
-    val projectId: Int? = null,
+    val projects: List<ProjectEntity>? = null,
     val skillCombinationOperator: BooleanOp? = null,
     val skills: List<String>? = null)
 

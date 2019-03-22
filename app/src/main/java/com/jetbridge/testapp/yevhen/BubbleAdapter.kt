@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemBubbleOptionBinding
 
 class BubbleAdapter<T : Any>(private val data: List<T>,
+                             selectedData: List<T> = emptyList(),
                              private val selectionEnabled: Boolean = true,
                              private val multiSelectionEnabled: Boolean = true,
                              private val darkText: Boolean = false)
     : RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
 
-    private val selectedIndices = mutableSetOf<Int>()
+    private val selectedIndices = selectedData
+        .map { data.indexOf(it) }
+        .filter { it >= 0 }
+        .toMutableSet()
 
     override fun onCreateViewHolder(parentView: ViewGroup, viewType: Int): BubbleAdapter.ViewHolder {
         return ViewHolder(DataBindingUtil.inflate(

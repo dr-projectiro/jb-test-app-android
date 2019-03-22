@@ -45,8 +45,11 @@ class MembersListPresenter(val view: MembersListView) {
                 // trying to keep side effects in terminal monad operator only
                 val (members, skills, projects) = collectedData
                 this.members = members
-                this.projects = projects
-                this.skills = skills
+                // project list merge is required as long as there is no separate 'GET projects' endpoint
+                // if projects are not included in the filter, they won't be available during the next try
+                this.projects = this.projects.plus(projects).distinct()
+                // the same thing for skills
+                this.skills = this.skills.plus(skills).distinct()
                 view.setActionBarButtonsEnabled(true)
                 view.displayTeamMemberItems(members, currentFilter)
             },
@@ -65,10 +68,12 @@ class MembersListPresenter(val view: MembersListView) {
         .filter { it != null }
         .map { it!! }
 
-    private fun getSkillsData(newMembersData: List<TeamMemberEntity>) = newMembersData
-        .map { it.skills }
-        .reduce { list1, list2 -> list1.plus(list2) }
-        .distinct()
+    private fun getSkillsData(newMembersData: List<TeamMemberEntity>) =
+        if (newMembersData.isEmpty()) emptyList()
+        else newMembersData
+            .map { it.skills }
+            .reduce { list1, list2 -> list1.plus(list2) }
+            .distinct()
 
     private fun formatMembersData(newMembersData: List<TeamMemberEntity>) = newMembersData
         .sortedBy { it.currentProject?.id ?: Int.MAX_VALUE }
