@@ -7,7 +7,6 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import com.jetbridge.testapp.yevhen.databinding.ActivityMembersListBinding
 import io.reactivex.Completable
@@ -15,6 +14,7 @@ import android.widget.ProgressBar
 import android.view.animation.Animation
 import android.view.animation.Transformation
 import android.widget.RadioButton
+import io.reactivex.CompletableEmitter
 
 const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 
@@ -80,6 +80,11 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
     override fun displayLoadingProgress(percentage: Float): Completable {
         return Completable.create { emitter ->
+            val viewTagAsEmitter = binding.pbLoadingProgress.tag
+            if (viewTagAsEmitter is CompletableEmitter) {
+                viewTagAsEmitter.onComplete()
+            }
+            binding.pbLoadingProgress.tag = emitter
             binding.pbLoadingProgress.visibility = View.VISIBLE
             binding.tvDataLoadingLabel.visibility = View.VISIBLE
             binding.containerRvTeamMembers.visibility = View.INVISIBLE
@@ -92,6 +97,9 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
             anim.fillBefore = true
             anim.setAnimationListener(object : Animation.AnimationListener {
                 override fun onAnimationEnd(animation: Animation?) {
+                    if (binding.pbLoadingProgress.tag == emitter) {
+                        binding.pbLoadingProgress.tag = null
+                    }
                     emitter.onComplete()
                 }
 

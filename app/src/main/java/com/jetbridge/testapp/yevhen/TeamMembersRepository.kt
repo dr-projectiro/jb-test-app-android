@@ -1,5 +1,6 @@
 package com.jetbridge.testapp.yevhen
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Observable
@@ -69,6 +70,7 @@ class TeamMembersRepository(apiBaseUrl: String) {
                     }
                 }
             } while (pageHttpResponse.body()?.hasNext == true)
+
             emitter.onComplete()
         }.subscribeOn(Schedulers.io())
 

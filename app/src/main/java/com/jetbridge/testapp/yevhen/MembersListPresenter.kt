@@ -38,7 +38,9 @@ class MembersListPresenter(val view: MembersListView) {
                     .displayLoadingProgress(calculateProgressPercentage(loadedChunkCount.get()))
             }.andThen(view.displayLoadingProgress(1.0f))
             .delay(550, TimeUnit.MILLISECONDS)
-            .andThen(Single.fromCallable { extractAllDataFromMembersData(loadedMembersData) })
+            .andThen(Single.fromCallable {
+                extractAllDataFromMembersData(loadedMembersData)
+            })
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ collectedData ->
                 // trying to keep side effects in terminal monad operator only
