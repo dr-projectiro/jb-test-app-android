@@ -7,11 +7,14 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.jetbridge.testapp.yevhen.databinding.ActivityDetailedProfileBinding
 import org.joda.time.LocalDateTime
 import org.joda.time.LocalTime
+import java.lang.IllegalStateException
 
 const val PROJECTS_KEY = "projects"
 const val TEAM_MEMBER_KEY = "team_member"
@@ -46,8 +49,7 @@ class DetailedProfileActivity : AppCompatActivity() {
         // set projects data
         binding.rvProjects.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL, false)
-        binding.rvProjects.adapter = BubbleAdapter(
-            data = projects, selectionEnabled = true, multiSelectionEnabled = false, darkText = true)
+        binding.rvProjects.adapter = initProjectsAdapter()
 
         // display manager data
         val managerId = teamMember.managerId
@@ -57,9 +59,7 @@ class DetailedProfileActivity : AppCompatActivity() {
 
         // display current project data
         val currentProject = teamMember.currentProject
-        binding.tvCurrentProject.text =
-            if (currentProject != null) currentProject.projectName
-            else getString(R.string.no_project)
+        displayProject(currentProject)
         binding.btnChangeProject.setText(
             if (currentProject != null) R.string.change_project
             else R.string.assign_to_project)
@@ -85,6 +85,56 @@ class DetailedProfileActivity : AppCompatActivity() {
         } ?: getString(R.string.no_record)
 
         binding.btnBack.setOnClickListener { onBackPressed() }
+        binding.btnChangeProject.setOnClickListener { onChangeProjectPressed() }
+    }
+
+    private fun displayProject(project: ProjectEntity?) {
+        binding.tvCurrentProject.text = project?.projectName ?: getString(R.string.no_project)
+    }
+
+    private fun initProjectsAdapter() = BubbleAdapter(
+        data = projects, selectionEnabled = true, multiSelectionEnabled = false,
+        darkText = true, selectionCallback = { onProjectSelected(it) })
+
+    private fun onProjectSelected(listWithSingleProject: List<ProjectEntity>) {
+        if (listWithSingleProject.isEmpty()) {
+            return // it's possible that user de-selected project
+        }
+        if (listWithSingleProject.size > 1) {
+            throw IllegalStateException("Project adapter should deny multi selection")
+        }
+        val selectedProject = listWithSingleProject[0]
+
+        // build confirmation dialog
+        val dialog = MaterialDialog.Builder(this)
+            .positiveText(R.string.yes_button)
+            .negativeText(R.string.cancel_button)
+            .title(R.string.transfer_to_project)
+            .content(getString(R.string.are_you_sure_to_transfer_x_to_y,
+                teamMember.firstName + " " + teamMember.lastName, selectedProject.projectName))
+            .onPositive { _, _ ->
+                resetProjectList()
+                MainApp.repository.changeTeamMemberProject(teamMember.id, selectedProject.id)
+                    .subscribe({
+                        displayProject(selectedProject)
+                        binding.btnChangeProject.setText(R.string.project_changed_successfully)
+                    }, {
+                        binding.btnChangeProject.setText(R.string.failed_to_change_retry)
+                    })
+            }
+            .onNegative { _, _ -> resetProjectList() }
+            .build()
+
+        dialog.show()
+    }
+
+    private fun resetProjectList() {
+        binding.rvProjects.visibility = View.GONE
+        binding.rvProjects.adapter = initProjectsAdapter()
+    }
+
+    private fun onChangeProjectPressed() {
+        binding.rvProjects.visibility = View.VISIBLE
     }
 
     companion object {

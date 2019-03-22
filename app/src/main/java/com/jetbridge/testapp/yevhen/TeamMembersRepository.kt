@@ -1,10 +1,10 @@
 package com.jetbridge.testapp.yevhen
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -24,8 +24,6 @@ class TeamMembersRepository(apiBaseUrl: String) {
     private val backendApi = createBackendApi(apiBaseUrl)
     private val gson = Gson()
 
-    fun getAllProjects() = mergePages { page -> backendApi.getProjectsPage(page).execute() }
-
     fun getAllTeamMembers(filter: TeamMemberFilter = TeamMemberFilter()) =
         mergePages { page ->
             backendApi.getTeamMembersPage(
@@ -34,8 +32,10 @@ class TeamMembersRepository(apiBaseUrl: String) {
                 filter.onHolidaysNow, filter.workingNow, page).execute()
         }
 
-    private fun changeTeamMemberProject(teamMemberId: Int, projectId: Int?) =
-        Single.just(true)
+    fun changeTeamMemberProject(teamMemberId: Int, projectId: Int) =
+        backendApi.changeTeamMemberProject(teamMemberId, projectId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
 
     private fun createBackendApi(apiBaseUrl: String) = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
@@ -81,9 +81,6 @@ class TeamMembersRepository(apiBaseUrl: String) {
 }
 
 interface BackendApi {
-    @GET("/projects?page")
-    fun getProjectsPage(@Query("page") page: Int? = null)
-        : Call<ProjectsDataPage>
 
     @GET("/team")
     fun getTeamMembersPage(

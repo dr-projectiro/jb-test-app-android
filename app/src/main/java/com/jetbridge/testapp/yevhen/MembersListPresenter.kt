@@ -20,7 +20,7 @@ class MembersListPresenter(val view: MembersListView) {
     var projects: List<ProjectEntity> = emptyList()
         private set
 
-    fun start() {
+    fun restart() {
         loadDataForFilter(currentFilter)
     }
 

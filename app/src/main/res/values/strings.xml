@@ -36,7 +36,13 @@
     <string name="no_data_try_different_filter">No data found for your request\nTry with different filter!</string>
     <string name="your_data_is_loading">Your data is loading</string>
     <string name="network_error_please_retry">Failed to load\nPlease, retry</string>
+    <string name="are_you_sure_to_transfer_x_to_y">Are you sure to transfer %s to %s project?</string>
+    <string name="transfer_to_project">Transfer to project</string>
+    <string name="yes_button">Yes</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="failed_to_change_retry">Failed… Retry?</string>
     <string name="retry">Retry</string>
+    <string name="project_changed_successfully">Project changed…</string>
 
     <!--filter options-->
     <string name="skills_filter_option">skills</string>

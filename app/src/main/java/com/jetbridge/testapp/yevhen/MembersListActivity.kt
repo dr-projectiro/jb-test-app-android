@@ -67,9 +67,12 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
         // let user retry data download when network connection failed
         binding.btnRetry.setOnClickListener { presenter.retryLoadData() }
+    }
 
-        // load initial data
-        presenter.start()
+    override fun onResume() {
+        super.onResume()
+        // load actual data
+        presenter.restart()
     }
 
     class OnScrollSeparatorVisibilityHandler(val viewVisibleIfScrolled: View) : RecyclerView.OnScrollListener() {
