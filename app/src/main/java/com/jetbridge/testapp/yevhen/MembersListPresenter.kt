@@ -48,7 +48,7 @@ class MembersListPresenter(val view: MembersListView) {
                 this.projects = projects
                 this.skills = skills
                 view.setActionBarButtonsEnabled(true)
-                view.displayTeamMemberItems(members)
+                view.displayTeamMemberItems(members, currentFilter)
             },
                 { TODO("handle errors") })
     }
@@ -96,7 +96,7 @@ interface MembersListView {
 
     fun displayLoadingProgress(percentage: Float): Completable
 
-    fun displayTeamMemberItems(teamMembers: List<TeamMemberEntity>)
+    fun displayTeamMemberItems(teamMembers: List<TeamMemberEntity>, filter: TeamMemberFilter)
 
     fun displayFilter(filter: TeamMemberFilter,
                       skills: List<String>,

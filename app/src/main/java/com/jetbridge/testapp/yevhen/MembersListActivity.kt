@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.View
 import com.jetbridge.testapp.yevhen.databinding.ActivityMembersListBinding
 import io.reactivex.Completable
@@ -30,6 +32,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
         binding.rvTeamMembers.layoutManager = LinearLayoutManager(this)
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(emptyList(), emptyList())
+        binding.rvTeamMembers.addOnScrollListener(OnScrollSeparatorVisibilityHandler(binding.upperTeamDataSeparator))
 
         // init animated drawables (switching state of filter actionbar button)
         tuneToCancel = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_tune_to_cancel)
@@ -55,6 +58,13 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
         // load initial data
         presenter.start()
+    }
+
+    class OnScrollSeparatorVisibilityHandler(val viewVisibleIfScrolled: View) : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            recyclerView.scrollY
+            viewVisibleIfScrolled.visibility = if (dy > 0) View.VISIBLE else View.INVISIBLE
+        }
     }
 
     private fun joinRadioButtons(radioButtons: List<RadioButton>) {
@@ -89,13 +99,15 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         }
     }
 
-    override fun displayTeamMemberItems(teamMembers: List<TeamMemberEntity>) {
+    override fun displayTeamMemberItems(teamMembers: List<TeamMemberEntity>, filter: TeamMemberFilter) {
         binding.pbLoadingProgress.clearAnimation()
         binding.pbLoadingProgress.visibility = View.INVISIBLE
         binding.tvDataLoadingLabel.visibility = View.INVISIBLE
         binding.pbLoadingProgress.progress = 0
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers, presenter.projects)
         binding.containerRvTeamMembers.visibility = View.VISIBLE
+        binding.tvSubtitle.visibility = View.VISIBLE
+        binding.tvSubtitle.text = buildFilterDescriptionText(filter)
     }
 
     override fun setActionBarButtonsEnabled(enabled: Boolean) {
@@ -131,6 +143,18 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         // setup skills recyclerview
         binding.rvFilterSkills.adapter = BubbleAdapter(skills, true)
         binding.rvFilterProjects.adapter = BubbleAdapter(projects, true)
+    }
+
+    private fun buildFilterDescriptionText(filter: TeamMemberFilter): String {
+        val filteringOptions = mutableListOf<Int>().apply {
+            if (filter.skillCombinationOperator != null) add(R.string.skills_filter_option)
+            if (filter.projectId != null) add(R.string.projects_filter_option)
+            if (filter.onHolidaysNow != null) add(R.string.holidays_filter_option)
+            if (filter.workingNow != null) add(R.string.work_time_filter_option)
+        }.map { getString(it) }
+
+        return if (filteringOptions.isEmpty()) getString(R.string.all_data_no_filters)
+        else getString(R.string.filtering_by, filteringOptions.reduce { acc, s -> "$acc, $s" })
     }
 
     private fun obtainFilterFromViews(): TeamMemberFilter {

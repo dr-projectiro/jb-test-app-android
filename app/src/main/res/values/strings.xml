@@ -31,4 +31,12 @@
     <string name="no_record">No record</string>
     <string name="no_project">No project</string>
     <string name="confirm_project">Confirm project</string>
+
+    <!--filter options-->
+    <string name="skills_filter_option">skills</string>
+    <string name="projects_filter_option">projects</string>
+    <string name="holidays_filter_option">holidays</string>
+    <string name="work_time_filter_option">working now</string>
+    <string name="all_data_no_filters">All data (no filters)</string>
+    <string name="filtering_by">Filtering by: %s</string>
 </resources>

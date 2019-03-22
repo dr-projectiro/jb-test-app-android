@@ -59,7 +59,7 @@ class BubbleAdapter<T : Any>(private val data: List<T>,
         // set dark/light color depending on the option
         viewHolder.binding.tvBubbleText.setTextColor(ResourcesCompat
             .getColor(viewHolder.itemView.context.resources,
-                if (darkText) R.color.profile_grey_dark else R.color.white, null))
+                if (darkText) R.color.grey_dark else R.color.white, null))
     }
 
     fun getSelectedData(): List<T> = selectedIndices.map { data[it] }

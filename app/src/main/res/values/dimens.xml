@@ -2,17 +2,14 @@
 <resources>
     <dimen name="appbar_height">56dp</dimen>
     <dimen name="appbar_button_size">56dp</dimen>
-
-    <dimen name="appbar_text_size">20sp</dimen>
-
+    <dimen name="backdrop_card_view_radius">12dp</dimen>
     <dimen name="margin_mid">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_large">24dp</dimen>
-
     <dimen name="bubble_option_height">36dp</dimen>
-
     <dimen name="team_member_list_avatar_size">24dp</dimen>
     <dimen name="team_member_list_working_icon_size">12dp</dimen>
-
     <dimen name="profile_activity_avatar_size">64dp</dimen>
+
+    <dimen name="appbar_text_size">20sp</dimen>
 </resources>

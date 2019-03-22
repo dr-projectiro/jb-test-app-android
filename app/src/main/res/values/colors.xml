@@ -8,17 +8,15 @@
     <color name="white">#ffffff</color>
     <color name="appbar_button_ripple_color">#9e7de0</color>
 
-    <!--team members list-->
-    <color name="team_members_scroll_upper_bounds_separator">#000000</color>
-
     <color name="green_working_hours">#0b6623</color>
     <color name="red_not_working_hours">#c21807</color>
 
     <color name="base_avatar_color">#aaaaaa</color>
     <color name="light_avatar_color">#e9e9e9</color>
-    <color name="profile_grey">#aaaaaa</color>
-    <color name="profile_grey_dark">#777777</color>
-    <color name="profile_grey_light">#e9e9e9</color>
+    <color name="grey">#aaaaaa</color>
+    <color name="grey_dark">#777777</color>
+    <color name="grey_xdark">#444444</color>
+    <color name="grey_light">#e9e9e9</color>
 
     <color name="mild_color_1">#ca8e5c</color>
     <color name="mild_color_2">#b47033</color>
