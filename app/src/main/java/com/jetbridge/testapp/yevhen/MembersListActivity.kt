@@ -125,6 +125,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers, presenter.projects)
         binding.containerRvTeamMembers.visibility = View.VISIBLE
         binding.tvSubtitle.visibility = View.VISIBLE
+        binding.rvTeamMembers.isLayoutFrozen = false
 
         showNoDataScreen(teamMembers.isEmpty())
     }
@@ -140,6 +141,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         tuneToCancel?.start()
         binding.btnFilterAccept.visibility = View.GONE
         binding.cntFilter.visibility = View.GONE
+        binding.rvTeamMembers.isLayoutFrozen = false
     }
 
     override fun displayFilter(filter: TeamMemberFilter,
@@ -171,6 +173,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
             selectionEnabled = true)
         binding.rvFilterSkills.adapter = skillsFilterAdapter
         binding.rvFilterProjects.adapter = projectsFilterAdapter
+        binding.rvTeamMembers.isLayoutFrozen = true
     }
 
     private fun showNoDataScreen(display: Boolean) {

@@ -18,6 +18,8 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
                              private val projects: List<ProjectEntity>)
     : RecyclerView.Adapter<TeamMembersListAdapter.ViewHolder>() {
 
+    private var attachedRecyclerView: RecyclerView? = null
+
     init {
         setHasStableIds(true)
     }
@@ -66,9 +68,16 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         }
 
         viewHolder.binding.viewItemClickDelegate.setOnClickListener {
-            DetailedProfileActivity.start(viewHolder.itemView.context,
-                teamMember, projects)
+            if (attachedRecyclerView?.isLayoutFrozen == false) {
+                DetailedProfileActivity.start(viewHolder.itemView.context,
+                    teamMember, projects)
+            }
         }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        attachedRecyclerView = recyclerView
     }
 
     private fun isOnHolidayNow(teamMember: TeamMemberEntity): Boolean {
