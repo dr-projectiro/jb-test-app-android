@@ -111,12 +111,6 @@ interface DataPage<T> {
     val page: Int get() = throw NotImplementedError()
 }
 
-class ProjectsDataPage(
-    override val items: List<ProjectEntity>,
-    override val hasPrevious: Boolean,
-    override val hasNext: Boolean,
-    override val page: Int) : DataPage<ProjectEntity>
-
 class TeamMembersDataPage(
     override val items: List<TeamMemberEntity>,
     override val hasPrevious: Boolean,
@@ -175,8 +169,6 @@ data class TeamMemberEntity(
 
     @SerializedName("working_hours")
     val workingHours: WorkingHoursEntity) {
-
-    fun convertToManagerId() = ManagerId(id, firstName, lastName)
 }
 
 enum class BooleanOp { AND, OR }
