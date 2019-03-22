@@ -33,6 +33,7 @@
     <string name="not_assigned_to_project">Not assigned to project</string>
     <string name="project_colon">Project: %s</string>
     <string name="confirm_project">Confirm project</string>
+    <string name="no_data_try_different_filter">No data found for your request\nTry with different filter!</string>
 
     <!--filter options-->
     <string name="skills_filter_option">skills</string>

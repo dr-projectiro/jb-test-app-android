@@ -5,7 +5,6 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 @SuppressLint("CheckResult")
@@ -23,24 +22,23 @@ class MembersListPresenter(val view: MembersListView) {
         loadDataForFilter(currentFilter)
     }
 
-    fun loadDataForFilter(filter: TeamMemberFilter) {
+    private fun loadDataForFilter(filter: TeamMemberFilter) {
         view.setActionBarButtonsEnabled(false)
         val loadedMembersData = mutableListOf<TeamMemberEntity>()
         val loadedChunkCount = AtomicInteger(0)
         view.displayLoadingProgress(0f)
-        repository.getAllTeamMembers(filter)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .flatMapCompletable { dataChunk ->
-                loadedMembersData.addAll(dataChunk)
-                loadedChunkCount.incrementAndGet()
-                return@flatMapCompletable view
-                    .displayLoadingProgress(calculateProgressPercentage(loadedChunkCount.get()))
-            }.andThen(view.displayLoadingProgress(1.0f))
-            .delay(550, TimeUnit.MILLISECONDS)
-            .andThen(Single.fromCallable {
-                extractAllDataFromMembersData(loadedMembersData)
-            })
+            .andThen(repository.getAllTeamMembers(filter)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapCompletable { dataChunk ->
+                    loadedMembersData.addAll(dataChunk)
+                    loadedChunkCount.incrementAndGet()
+                    return@flatMapCompletable view
+                        .displayLoadingProgress(calculateProgressPercentage(loadedChunkCount.get()))
+                }.andThen(view.displayLoadingProgress(1.0f))
+                .andThen(Single.fromCallable {
+                    extractAllDataFromMembersData(loadedMembersData)
+                }))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ collectedData ->
                 // trying to keep side effects in terminal monad operator only

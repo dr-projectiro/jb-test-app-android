@@ -1,5 +1,6 @@
 package com.jetbridge.testapp.yevhen
 
+import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -58,6 +59,10 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.rvFilterProjects.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.HORIZONTAL, false)
 
+        // setup animations
+        binding.cntCard.layoutTransition.enableTransitionType(LayoutTransition.APPEARING)
+        binding.cvCard.layoutTransition.enableTransitionType(LayoutTransition.APPEARING)
+
         // load initial data
         presenter.start()
     }
@@ -66,7 +71,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             viewVisibleIfScrolled.visibility =
                 if (recyclerView.computeVerticalScrollOffset() > 0) View.VISIBLE
-                else View.INVISIBLE
+                else View.GONE
         }
     }
 
@@ -79,6 +84,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
     }
 
     override fun displayLoadingProgress(percentage: Float): Completable {
+        showNoDataScreen(false)
         return Completable.create { emitter ->
             val viewTagAsEmitter = binding.pbLoadingProgress.tag
             if (viewTagAsEmitter is CompletableEmitter) {
@@ -87,9 +93,9 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
             binding.pbLoadingProgress.tag = emitter
             binding.pbLoadingProgress.visibility = View.VISIBLE
             binding.tvDataLoadingLabel.visibility = View.VISIBLE
-            binding.containerRvTeamMembers.visibility = View.INVISIBLE
-            binding.tvSubtitle.visibility = View.INVISIBLE
-            binding.upperTeamDataSeparator.visibility = View.INVISIBLE
+            binding.containerRvTeamMembers.visibility = View.GONE
+            binding.tvSubtitle.visibility = View.GONE
+            binding.upperTeamDataSeparator.visibility = View.GONE
             val anim = ProgressBarAnimation(binding.pbLoadingProgress,
                 binding.pbLoadingProgress.progress.toFloat(), percentage * 100)
             anim.duration = PROGRESS_BAR_INCREMENT_DURATION
@@ -112,13 +118,15 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
     override fun displayTeamMemberItems(teamMembers: List<TeamMemberEntity>, filter: TeamMemberFilter) {
         binding.pbLoadingProgress.clearAnimation()
-        binding.pbLoadingProgress.visibility = View.INVISIBLE
-        binding.tvDataLoadingLabel.visibility = View.INVISIBLE
+        binding.tvSubtitle.text = buildFilterDescriptionText(filter)
+        binding.pbLoadingProgress.visibility = View.GONE
+        binding.tvDataLoadingLabel.visibility = View.GONE
         binding.pbLoadingProgress.progress = 0
         binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers, presenter.projects)
         binding.containerRvTeamMembers.visibility = View.VISIBLE
         binding.tvSubtitle.visibility = View.VISIBLE
-        binding.tvSubtitle.text = buildFilterDescriptionText(filter)
+
+        showNoDataScreen(teamMembers.isEmpty())
     }
 
     override fun setActionBarButtonsEnabled(enabled: Boolean) {
@@ -130,7 +138,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.tsHeader.setText(getString(R.string.appbar_header_team_members))
         binding.btnFilterOpenCancel.setImageDrawable(tuneToCancel)
         tuneToCancel?.start()
-        binding.btnFilterAccept.visibility = View.INVISIBLE
+        binding.btnFilterAccept.visibility = View.GONE
         binding.cntFilter.visibility = View.GONE
     }
 
@@ -163,6 +171,12 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
             selectionEnabled = true)
         binding.rvFilterSkills.adapter = skillsFilterAdapter
         binding.rvFilterProjects.adapter = projectsFilterAdapter
+    }
+
+    private fun showNoDataScreen(display: Boolean) {
+        val visibility = if (display) View.VISIBLE else View.GONE
+        binding.ivNoData.visibility = visibility
+        binding.tvNoData.visibility = visibility
     }
 
     private fun updateSkillRadioButtons(selectedSkills: List<String>) {
