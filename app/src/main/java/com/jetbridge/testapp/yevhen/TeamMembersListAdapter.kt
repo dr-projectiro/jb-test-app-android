@@ -40,6 +40,20 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         viewHolder.binding.tvName.text = "${teamMember.firstName} ${teamMember.lastName}"
         viewHolder.binding.tvSkills.text = teamMember.skills.reduce { acc, skill -> "$acc, $skill" }
         colorizeAvatar(viewHolder.binding.ivAvatar, teamMember)
+
+        bindWorkingHours(viewHolder, itemIndex)
+        bindProjectHeader(viewHolder, itemIndex)
+
+        viewHolder.binding.viewItemClickDelegate.setOnClickListener {
+            if (attachedRecyclerView?.isLayoutFrozen == false) {
+                DetailedProfileActivity.start(viewHolder.itemView.context,
+                    teamMember, projects)
+            }
+        }
+    }
+
+    private fun bindWorkingHours(viewHolder: ViewHolder, itemIndex: Int) {
+        val teamMember = data[itemIndex]
         // bind working hours
         val isWorkingNow = isNowWorkingHours(teamMember.workingHours)
             && !isOnHolidayNow(teamMember)
@@ -50,8 +64,12 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         viewHolder.binding.tvWorkingOrNotWorking
             .setTextColor(ResourcesCompat.getColor(viewHolder.itemView.resources,
                 if (isWorkingNow) R.color.green_working_hours else R.color.red_not_working, null))
-        // bind project header
-        val projectHeaderVisible = itemIndex == 0 || data[itemIndex - 1].currentProject?.id != teamMember.currentProject?.id
+    }
+
+    private fun bindProjectHeader(viewHolder: ViewHolder, itemIndex: Int) {
+        val teamMember = data[itemIndex]
+        val projectHeaderVisible = itemIndex == 0
+            || data[itemIndex - 1].currentProject?.id != teamMember.currentProject?.id
         val projectSeparatorVisible = projectHeaderVisible && itemIndex != 0
 
         viewHolder.binding.projectSeparator.visibility =
@@ -65,13 +83,6 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
                 else viewHolder.itemView.context.getString(R.string.no_project)
         } else {
             viewHolder.binding.tvProjectHeader.visibility = View.GONE
-        }
-
-        viewHolder.binding.viewItemClickDelegate.setOnClickListener {
-            if (attachedRecyclerView?.isLayoutFrozen == false) {
-                DetailedProfileActivity.start(viewHolder.itemView.context,
-                    teamMember, projects)
-            }
         }
     }
 

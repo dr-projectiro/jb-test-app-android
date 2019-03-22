@@ -29,6 +29,8 @@ class DetailedProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // this is the screen displaying user profile details
+        // team member data and all available project are obtained as screen params
         val encodedTeamMember = intent.getStringExtra(TEAM_MEMBER_KEY)
         val encodedProjects = intent.getStringExtra(PROJECTS_KEY)
 
@@ -37,21 +39,28 @@ class DetailedProfileActivity : AppCompatActivity() {
             return
         }
 
+        // decode params from json to data class objects
         teamMember = gson.fromJson(encodedTeamMember, TeamMemberEntity::class.java)
         projects = gson.fromJson<List<ProjectEntity>>(encodedProjects, object :
             TypeToken<List<ProjectEntity>>() {}.type)
 
+        // create GUI bindings
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detailed_profile)
 
-        // display skills data
+        binding.btnBack.setOnClickListener { onBackPressed() }
+        binding.btnChangeProject.setOnClickListener { onChangeProjectPressed() }
+    }
+
+    private fun displayProfileData() {
+        // display skills data of the team member
         binding.tvSkills.text = teamMember.skills.reduce { acc, skill -> "$acc, $skill" }
 
-        // set projects data
+        // prepare projects data to display later
         binding.rvProjects.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL, false)
         binding.rvProjects.adapter = initProjectsAdapter()
 
-        // display manager data
+        // display who's manager of the team member
         val managerId = teamMember.managerId
         binding.tvManager.text =
             if (managerId != null) "${managerId.firstName} ${managerId.lastName}"
@@ -68,7 +77,10 @@ class DetailedProfileActivity : AppCompatActivity() {
         colorizeAvatar(binding.ivAvatar, teamMember)
         binding.tvName.text = "${teamMember.firstName} ${teamMember.lastName}"
 
-        // display availability details
+        displayAvailabilityData()
+    }
+
+    private fun displayAvailabilityData() {
         // working hours
         val workStart = LocalTime.parse(teamMember.workingHours.startLocalIsoTime).toString("HH:mm")
         val workEnd = LocalTime.parse(teamMember.workingHours.endLocalIsoTime).toString("HH:mm")
@@ -78,14 +90,10 @@ class DetailedProfileActivity : AppCompatActivity() {
         binding.tvHolidays.text = teamMember.onHolidaysTillIsoDate?.let {
             getString(R.string.on_holidays_until, LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT))
         } ?: getString(R.string.no_record)
-
         // free since
         binding.tvFreeSince.text = teamMember.freeSinceIsoDate?.let {
             getString(R.string.free_since, LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT))
         } ?: getString(R.string.no_record)
-
-        binding.btnBack.setOnClickListener { onBackPressed() }
-        binding.btnChangeProject.setOnClickListener { onChangeProjectPressed() }
     }
 
     private fun displayProject(project: ProjectEntity?) {

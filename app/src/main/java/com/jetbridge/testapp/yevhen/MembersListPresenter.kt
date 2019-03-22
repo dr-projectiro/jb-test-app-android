@@ -29,17 +29,21 @@ class MembersListPresenter(val view: MembersListView) {
         view.setActionBarButtonsEnabled(false)
         val loadedMembersData = mutableListOf<TeamMemberEntity>()
         val loadedChunkCount = AtomicInteger(0)
+
         view.displayLoadingProgress(0f)
             .andThen(repository.getAllTeamMembers(filter)
-                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io()) // execute io operations on io thread, while obtaining result in GUI thread
                 .observeOn(AndroidSchedulers.mainThread())
-                .flatMapCompletable { dataChunk ->
+                .flatMapCompletable { dataChunk -> // collect downloaded data and display progress
                     loadedMembersData.addAll(dataChunk)
                     loadedChunkCount.incrementAndGet()
                     return@flatMapCompletable view
                         .displayLoadingProgress(calculateProgressPercentage(loadedChunkCount.get()))
-                }.andThen(view.displayLoadingProgress(1.0f))
+                }.andThen(view.displayLoadingProgress(1.0f)) // display 100% progress (~1.0f)
                 .andThen(Single.fromCallable {
+                    // it is convenient to parse a bit data fetched from backend:
+                    // 1. group projects and user skills
+                    // 2. keep team members from the same project grouped together
                     extractAllDataFromMembersData(loadedMembersData)
                 }))
             .observeOn(AndroidSchedulers.mainThread())
@@ -56,7 +60,6 @@ class MembersListPresenter(val view: MembersListView) {
                 view.setActionBarButtonsEnabled(true)
                 view.displayTeamMemberItems(members, currentFilter)
             }, {
-                Log.e("JBTEST", it.message, it)
                 dataIsLoading = false
                 view.displayDataFailure()
             })
@@ -110,6 +113,9 @@ class MembersListPresenter(val view: MembersListView) {
     }
 }
 
+/**
+ * Interface of View visible to Presenter
+ */
 interface MembersListView {
 
     fun displayLoadingProgress(percentage: Float): Completable

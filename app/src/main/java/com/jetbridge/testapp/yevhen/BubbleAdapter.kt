@@ -7,6 +7,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemBubbleOptionBinding
 
+/**
+ * An adapter between list of data and RecyclerView component.
+ * It is named as 'Bubble' because rendered items looked like bubbles.
+ * Those 'bubbles' are used as GUI component to let user select particular project or skill (in filter e.g).
+ */
 class BubbleAdapter<T : Any>(private val data: List<T>,
                              selectedData: List<T> = emptyList(),
                              private val selectionEnabled: Boolean = true,
@@ -49,11 +54,11 @@ class BubbleAdapter<T : Any>(private val data: List<T>,
         (viewHolder.binding.cntBubble.layoutParams as RecyclerView.LayoutParams).marginEnd =
             if (index == data.size - 1) viewHolder.binding.cntBubble.context.resources
                 .getDimensionPixelOffset(R.dimen.margin_mid) else 0
-        // choose color for bubble backround
+        // choose color for bubble background
         val bubbleBackgroundColorId =
             if (darkText) R.drawable.bg_selected_bubble_light
             else R.drawable.bg_selected_bubble_dark
-        // set backround for bubble item
+        // set background for bubble item
         viewHolder.binding.cntBubble.setBackgroundResource(
             if (index in selectedIndices || !selectionEnabled) bubbleBackgroundColorId
             else android.R.color.transparent)
@@ -68,12 +73,15 @@ class BubbleAdapter<T : Any>(private val data: List<T>,
                 if (darkText) R.color.grey_dark else R.color.white, null))
     }
 
+    // provide data that user has selected by clicking 'bubbles'
     fun getSelectedData(): List<T> = selectedIndices.map { data[it] }
 
     class ViewHolder(val binding: ItemBubbleOptionBinding)
         : RecyclerView.ViewHolder(binding.root)
 }
 
+// marker interface to obtain more user readable description of an item, then ordinary .toString() call
+// used to obtain description of ProjectEntity
 interface ReadableEntity {
     val readableText: String get() = throw NotImplementedError()
 }

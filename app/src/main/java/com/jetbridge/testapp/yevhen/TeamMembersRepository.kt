@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.lang.IllegalStateException
 
-// safety catch threshold if backend feeds app with unlimited data
+// safety catch threshold if backend feeds app with unlimited data (due to possible bug)
 const val MAX_PAGE_LIMIT = 15000
 
 class TeamMembersRepository(apiBaseUrl: String) {
@@ -122,7 +122,6 @@ class TeamMembersDataPage(
     override val hasPrevious: Boolean,
     override val hasNext: Boolean,
     override val page: Int) : DataPage<TeamMemberEntity>
-
 
 data class ManagerId(
     val id: Int,

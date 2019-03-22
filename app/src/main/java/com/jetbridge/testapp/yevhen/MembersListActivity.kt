@@ -21,7 +21,19 @@ import io.reactivex.CompletableEmitter
 
 const val PROGRESS_BAR_INCREMENT_DURATION = 300L
 
-@SuppressLint("CheckResult")
+/**
+ * MemberListActivity is main application screen.
+ *
+ * It is split to MemberListActivity (logic closes to gui) and MemberListPresenter (other logic
+ * like data loading, taking care about correct state)
+ *
+ * MemberListPresenter retains a reference to an interface MemberListView,
+ * which is implemented by MemberListActivity.
+ *
+ * The motivation of using interface for view is born as the desire to more clearly see how
+ * View (Activity) and Presenter classes are coupled rather then from some proven theory.
+ */
+@SuppressLint("CheckResult") // suppress warnings that some function return values are not used
 class MembersListActivity : AppCompatActivity(), MembersListView {
     private lateinit var binding: ActivityMembersListBinding
     private lateinit var presenter: MembersListPresenter
@@ -83,6 +95,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         }
     }
 
+    // joins radio buttons into a group; among a group only single radio button can be in 'checked' state
     private fun joinRadioButtons(radioButtons: List<RadioButton>) {
         radioButtons.forEach { rb ->
             rb.setOnClickListener {
@@ -185,7 +198,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.rbOnHolidaysNow.isChecked = filter.onHolidaysNow == true
         binding.rbDontFilterAvailability.isChecked =
             filter.workingNow != true && filter.onHolidaysNow != true
-        // setup skills recyclerview
+        // setup skills recycler view
         skillsFilterAdapter = BubbleAdapter(
             data = skills,
             selectedData = filter.skills ?: emptyList(),
@@ -227,6 +240,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         else getString(R.string.filtering_by, filteringOptions.reduce { acc, s -> "$acc, $s" })
     }
 
+    // constructs filter object from GUI state
     private fun obtainFilterFromViews(): TeamMemberFilter {
         return TeamMemberFilter(
             onHolidaysNow = if (binding.rbOnHolidaysNow.isChecked) true else null,
@@ -240,6 +254,12 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
             })
     }
 
+    // returns null if parameter is and empty list, otherwise it is id transformation
+    // motivation of the method: to preserve the following semantics:
+    // 1) non-null list in filter means that we use list items for filtering
+    // 2) 'null' means that filter is ignored
+    // ---
+    // within this semantics, emptyList() is not convenient, thus force converted to null
     private fun <T> replaceEmptyToNull(data: List<T>?) =
         if (data?.isEmpty() == true) null else data
 }
