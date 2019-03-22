@@ -28,3 +28,10 @@ Start application manually (click 'JB test app' on device launcher after install
 $androidSdkDir/platform-tools/adb shell am start -n com.jetbridge.testapp.yevhen/com.jetbridge.testapp.yevhen.MembersListActivity
 ```
 Where 'com.jetbridge.testapp.yevhen.MembersListActivity' is main application screen.
+
+------
+Video of app usage:
+https://www.dropbox.com/s/flp58m9s401xlla/20190322_180500.mp4?dl=0
+
+Pre-built .apk file:
+https://www.dropbox.com/s/fo23yk8gub8zgnn/app-release.apk?dl=0
