@@ -34,4 +34,4 @@ Video of app usage:
 https://www.dropbox.com/s/flp58m9s401xlla/20190322_180500.mp4?dl=0
 
 Pre-built .apk file:
-https://www.dropbox.com/s/fo23yk8gub8zgnn/app-release.apk?dl=0
+https://www.dropbox.com/s/y1sbfcuic3886xh/app-release.apk?dl=0
