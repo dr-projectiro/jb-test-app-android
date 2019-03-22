@@ -3,8 +3,10 @@ package com.jetbridge.testapp.yevhen
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
+import android.graphics.PorterDuff.*
 import android.os.Bundle
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -62,6 +64,9 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         // setup animations
         binding.cntCard.layoutTransition.enableTransitionType(LayoutTransition.APPEARING)
         binding.cvCard.layoutTransition.enableTransitionType(LayoutTransition.APPEARING)
+
+        // let user retry data download when network connection failed
+        binding.btnRetry.setOnClickListener { presenter.retryLoadData() }
 
         // load initial data
         presenter.start()
@@ -127,7 +132,23 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.tvSubtitle.visibility = View.VISIBLE
         binding.rvTeamMembers.isLayoutFrozen = false
 
+        hideDataFailure()
         showNoDataScreen(teamMembers.isEmpty())
+    }
+
+    override fun displayDataFailure() {
+        binding.pbLoadingProgress.progressDrawable.setColorFilter(
+            ResourcesCompat.getColor(resources, R.color.red_not_working, null), Mode.SRC_IN)
+        binding.tvDataLoadingLabel.setText(R.string.network_error_please_retry)
+        binding.btnRetry.visibility = View.VISIBLE
+        displayLoadingProgress(1f).subscribe()
+    }
+
+    override fun hideDataFailure() {
+        binding.pbLoadingProgress.progressDrawable.setColorFilter(
+            ResourcesCompat.getColor(resources, R.color.colorAccent, null), Mode.SRC_IN)
+        binding.tvDataLoadingLabel.setText(R.string.your_data_is_loading)
+        binding.btnRetry.visibility = View.GONE
     }
 
     override fun setActionBarButtonsEnabled(enabled: Boolean) {

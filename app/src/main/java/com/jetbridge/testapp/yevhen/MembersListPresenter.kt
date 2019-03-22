@@ -1,6 +1,7 @@
 package com.jetbridge.testapp.yevhen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,6 +13,7 @@ class MembersListPresenter(val view: MembersListView) {
 
     private val repository = MainApp.repository
     private var currentFilter = TeamMemberFilter()
+    private var dataIsLoading = false
     private var filterOpen = false
     private var members: List<TeamMemberEntity> = emptyList()
     private var skills: List<String> = emptyList()
@@ -23,6 +25,7 @@ class MembersListPresenter(val view: MembersListView) {
     }
 
     private fun loadDataForFilter(filter: TeamMemberFilter) {
+        dataIsLoading = true
         view.setActionBarButtonsEnabled(false)
         val loadedMembersData = mutableListOf<TeamMemberEntity>()
         val loadedChunkCount = AtomicInteger(0)
@@ -41,6 +44,7 @@ class MembersListPresenter(val view: MembersListView) {
                 }))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ collectedData ->
+                dataIsLoading = false
                 // trying to keep side effects in terminal monad operator only
                 val (members, skills, projects) = collectedData
                 this.members = members
@@ -51,8 +55,11 @@ class MembersListPresenter(val view: MembersListView) {
                 this.skills = this.skills.plus(skills).distinct()
                 view.setActionBarButtonsEnabled(true)
                 view.displayTeamMemberItems(members, currentFilter)
-            },
-                { TODO("handle errors") })
+            }, {
+                Log.e("JBTEST", it.message, it)
+                dataIsLoading = false
+                view.displayDataFailure()
+            })
     }
 
     private fun extractAllDataFromMembersData(newMembersData: List<TeamMemberEntity>) =
@@ -94,6 +101,13 @@ class MembersListPresenter(val view: MembersListView) {
         if (filterOpen) view.displayFilter(currentFilter, skills, projects)
         else view.hideFilter()
     }
+
+    fun retryLoadData() {
+        if (!dataIsLoading) {
+            loadDataForFilter(currentFilter)
+            view.hideDataFailure()
+        }
+    }
 }
 
 interface MembersListView {
@@ -109,4 +123,7 @@ interface MembersListView {
     fun hideFilter()
 
     fun setActionBarButtonsEnabled(enabled: Boolean)
+
+    fun displayDataFailure()
+    fun hideDataFailure()
 }

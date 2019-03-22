@@ -229,25 +229,25 @@
                 android:animateLayoutChanges="true">
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/iv_no_data"
                     android:layout_width="@dimen/no_data_image_size"
                     android:layout_height="@dimen/no_data_image_size"
                     android:src="@drawable/ic_replay"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:visibility="gone"
-                    android:gravity="center"
                     android:id="@+id/tv_no_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/no_data_try_different_filter"
                     android:textColor="@color/grey"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_no_data" />
@@ -312,11 +312,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:animateLayoutChanges="true"
-                    android:text="Your data is loading"
+                    android:text="@string/your_data_is_loading"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/pb_loading_progress" />
+
+                <Button
+                    android:id="@+id/btn_retry"
+                    android:textColor="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="@string/retry"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_data_loading_label" />
 
             </android.support.constraint.ConstraintLayout>
         </android.support.v7.widget.CardView>

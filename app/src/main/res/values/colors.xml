@@ -9,7 +9,7 @@
     <color name="appbar_button_ripple_color">#9e7de0</color>
 
     <color name="green_working_hours">#0b6623</color>
-    <color name="red_not_working_hours">#c21807</color>
+    <color name="red_not_working">#c21807</color>
 
     <color name="base_avatar_color">#aaaaaa</color>
     <color name="light_avatar_color">#e9e9e9</color>

@@ -34,6 +34,9 @@
     <string name="project_colon">Project: %s</string>
     <string name="confirm_project">Confirm project</string>
     <string name="no_data_try_different_filter">No data found for your request\nTry with different filter!</string>
+    <string name="your_data_is_loading">Your data is loading</string>
+    <string name="network_error_please_retry">Failed to load\nPlease, retry</string>
+    <string name="retry">Retry</string>
 
     <!--filter options-->
     <string name="skills_filter_option">skills</string>

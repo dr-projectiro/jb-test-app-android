@@ -49,7 +49,7 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
             .setText(if (isWorkingNow) R.string.working_available else R.string.not_available)
         viewHolder.binding.tvWorkingOrNotWorking
             .setTextColor(ResourcesCompat.getColor(viewHolder.itemView.resources,
-                if (isWorkingNow) R.color.green_working_hours else R.color.red_not_working_hours, null))
+                if (isWorkingNow) R.color.green_working_hours else R.color.red_not_working, null))
         // bind project header
         val projectHeaderVisible = itemIndex == 0 || data[itemIndex - 1].currentProject?.id != teamMember.currentProject?.id
         val projectSeparatorVisible = projectHeaderVisible && itemIndex != 0
