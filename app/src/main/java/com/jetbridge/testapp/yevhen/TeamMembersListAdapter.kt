@@ -2,7 +2,6 @@ package com.jetbridge.testapp.yevhen
 
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
-import android.graphics.PorterDuff
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -43,7 +42,7 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         viewHolder.binding.ivWorkingHours
             .setImageResource(if (isWorkingNow) R.drawable.ic_time else R.drawable.ic_time_off)
         viewHolder.binding.tvWorkingOrNotWorking
-            .setText(if (isWorkingNow) R.string.working else R.string.not_working)
+            .setText(if (isWorkingNow) R.string.working_available else R.string.not_available)
         viewHolder.binding.tvWorkingOrNotWorking
             .setTextColor(ResourcesCompat.getColor(viewHolder.itemView.resources,
                 if (isWorkingNow) R.color.green_working_hours else R.color.red_not_working_hours, null))

@@ -5,38 +5,56 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cnt_team_member"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_grey_ripple">
 
         <ImageView
             android:id="@+id/iv_avatar"
             android:layout_width="@dimen/team_member_list_avatar_size"
             android:layout_height="@dimen/team_member_list_avatar_size"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_mid"
+            android:layout_marginBottom="@dimen/margin_mid"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_skills"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:gravity="start|center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+            app:layout_constraintEnd_toStartOf="@id/tv_working_or_not_working"
             app:layout_constraintStart_toEndOf="@id/iv_avatar"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_avatar">
 
-        <TextView
-            android:id="@+id/tv_skills"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_avatar"
-            app:layout_constraintTop_toBottomOf="@id/tv_name" />
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/grey_dark"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/tv_skills"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/grey" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/iv_working_hours"
             android:layout_width="@dimen/team_member_list_working_icon_size"
             android:layout_height="@dimen/team_member_list_working_icon_size"
+            android:layout_marginEnd="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -45,6 +63,7 @@
             android:id="@+id/tv_working_or_not_working"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_small"
             app:layout_constraintBottom_toBottomOf="@id/iv_working_hours"
             app:layout_constraintEnd_toStartOf="@id/iv_working_hours"
             app:layout_constraintTop_toTopOf="@id/iv_working_hours" />

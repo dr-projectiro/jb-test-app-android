@@ -17,8 +17,8 @@
     <string name="filter_all_of_skills">All of:</string>
     <string name="filter_no_skills">Don\'t filter skills</string>
 
-    <string name="working">Working</string>
-    <string name="not_working">Not working</string>
+    <string name="working_available">Available</string>
+    <string name="not_available">N/A</string>
     <string name="starting_in_hours_mins">starting in %$1s hours, %$1s mins</string>
     <string name="starting_in_mins">starting in %s mins</string>
     <string name="ending_in_hours_mins">ending in %$1s hours, %$1s mins</string>
@@ -39,4 +39,6 @@
     <string name="work_time_filter_option">working now</string>
     <string name="all_data_no_filters">All data (no filters)</string>
     <string name="filtering_by">Filtering by: %s</string>
+    <string name="on_holidays_until">Holidays until %s</string>
+    <string name="free_since">Free since %s</string>
 </resources>

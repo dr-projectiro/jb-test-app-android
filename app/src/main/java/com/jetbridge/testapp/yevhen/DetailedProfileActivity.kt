@@ -76,12 +76,12 @@ class DetailedProfileActivity : AppCompatActivity() {
             workStart, workEnd, teamMember.workingHours.timezone)
         // holidays
         binding.tvHolidays.text = teamMember.onHolidaysTillIsoDate?.let {
-            LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT)
+            getString(R.string.on_holidays_until, LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT))
         } ?: getString(R.string.no_record)
 
         // free since
         binding.tvFreeSince.text = teamMember.onHolidaysTillIsoDate?.let {
-            LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT)
+            getString(R.string.free_since, LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT))
         } ?: getString(R.string.no_record)
 
         binding.btnBack.setOnClickListener { onBackPressed() }
