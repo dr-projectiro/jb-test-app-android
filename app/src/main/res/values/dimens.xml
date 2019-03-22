@@ -10,4 +10,7 @@
     <dimen name="margin_large">24dp</dimen>
 
     <dimen name="bubble_option_height">36dp</dimen>
+
+    <dimen name="team_member_list_avatar_size">24dp</dimen>
+    <dimen name="team_member_list_working_icon_size">12dp</dimen>
 </resources>

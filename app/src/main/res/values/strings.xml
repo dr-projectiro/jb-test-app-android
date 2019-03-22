@@ -13,4 +13,12 @@
     <string name="filter_any_of_skills">Any of:</string>
     <string name="filter_all_of_skills">All of:</string>
     <string name="filter_no_skills">Don\'t filter skills</string>
+
+    <string name="working">Working</string>
+    <string name="not_working">Not working</string>
+    <string name="starting_in_hours_mins">starting in %$1s hours, %$1s mins</string>
+    <string name="starting_in_mins">starting in %s mins</string>
+    <string name="ending_in_hours_mins">ending in %$1s hours, %$1s mins</string>
+    <string name="ending_in_mins">ending in %s mins</string>
+
 </resources>

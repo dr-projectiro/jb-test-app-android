@@ -10,4 +10,25 @@
     <!--team members list-->
     <color name="team_members_scroll_upper_bounds_separator">#000000</color>
 
+    <color name="green_working_hours">#0b6623</color>
+    <color name="red_not_working_hours">#c21807</color>
+
+    <color name="base_avatar_color">#aaaaaa</color>
+    <color name="light_avatar_color">#e9e9e9</color>
+
+    <color name="mild_color_1">#ca8e5c</color>
+    <color name="mild_color_2">#b47033</color>
+    <color name="mild_color_3">#7f3f01</color>
+    <color name="mild_color_4">#f3c5a4</color>
+    <color name="mild_color_5">#ecad81</color>
+    <color name="mild_color_6">#ee9962</color>
+    <color name="mild_color_7">#c6c390</color>
+    <color name="mild_color_8">#9e9746</color>
+    <color name="mild_color_9">#6c7641</color>
+    <color name="mild_color_10">#e6e3ae</color>
+    <color name="mild_color_11">#dfd26a</color>
+    <color name="mild_color_12">#b4a83c</color>
+    <color name="mild_color_13">#d5c8cf</color>
+    <color name="mild_color_14">#baa6af</color>
+    <color name="mild_color_15">#876d76</color>
 </resources>
