@@ -114,6 +114,7 @@ class DetailedProfileActivity : AppCompatActivity() {
                 teamMember.firstName + " " + teamMember.lastName, selectedProject.projectName))
             .onPositive { _, _ ->
                 resetProjectList()
+                binding.btnChangeProject.setText(R.string.changing)
                 MainApp.repository.changeTeamMemberProject(teamMember.id, selectedProject.id)
                     .subscribe({
                         displayProject(selectedProject)

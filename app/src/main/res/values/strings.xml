@@ -43,6 +43,7 @@
     <string name="failed_to_change_retry">Failed… Retry?</string>
     <string name="retry">Retry</string>
     <string name="project_changed_successfully">Project changed…</string>
+    <string name="changing">Changing…</string>
 
     <!--filter options-->
     <string name="skills_filter_option">skills</string>
