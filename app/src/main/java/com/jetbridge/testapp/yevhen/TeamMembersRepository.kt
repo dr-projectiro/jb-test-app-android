@@ -88,7 +88,7 @@ interface BackendApi {
         @Query("skill") skills: List<String> = emptyList(),
         @Query("project") projectsArray: String? = null,
         @Query("holidays") onHolidays: Boolean? = null,
-        @Query("holidays") isWorkingNow: Boolean? = null,
+        @Query("working") isWorkingNow: Boolean? = null,
         @Query("page") page: Int? = null)
         : Call<TeamMembersDataPage>
 
