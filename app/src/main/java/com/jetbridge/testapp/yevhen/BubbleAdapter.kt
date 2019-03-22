@@ -11,7 +11,8 @@ class BubbleAdapter<T : Any>(private val data: List<T>,
                              selectedData: List<T> = emptyList(),
                              private val selectionEnabled: Boolean = true,
                              private val multiSelectionEnabled: Boolean = true,
-                             private val darkText: Boolean = false)
+                             private val darkText: Boolean = false,
+                             private val selectionCallback: (List<T>) -> Unit = {})
     : RecyclerView.Adapter<BubbleAdapter.ViewHolder>() {
 
     private val selectedIndices = selectedData
@@ -41,6 +42,7 @@ class BubbleAdapter<T : Any>(private val data: List<T>,
                     }
                     selectedIndices.add(index)
                 }
+                selectionCallback.invoke(getSelectedData())
                 notifyItemChanged(index)
             }
         // set right (end) margin for the right-most item

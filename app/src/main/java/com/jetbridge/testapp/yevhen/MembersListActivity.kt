@@ -147,13 +147,23 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         skillsFilterAdapter = BubbleAdapter(
             data = skills,
             selectedData = filter.skills ?: emptyList(),
-            selectionEnabled = true)
+            selectionEnabled = true,
+            selectionCallback = { updateSkillRadioButtons(it) })
         projectsFilterAdapter = BubbleAdapter(
             data = projects,
             selectedData = filter.projects ?: emptyList(),
             selectionEnabled = true)
         binding.rvFilterSkills.adapter = skillsFilterAdapter
         binding.rvFilterProjects.adapter = projectsFilterAdapter
+    }
+
+    private fun updateSkillRadioButtons(selectedSkills: List<String>) {
+        // avoid user confusion: if they selected a skill to filter, then filter should be turned on
+        // otherwise user may select some skills and forget to select skill combination rule (OR or AND)
+        if (!selectedSkills.isEmpty() && binding.rbFilterNoSkills.isChecked) {
+            binding.rbFilterNoSkills.isChecked = false
+            binding.rbFilterAnySkills.isChecked = true
+        }
     }
 
     private fun buildFilterDescriptionText(filter: TeamMemberFilter): String {

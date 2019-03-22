@@ -14,7 +14,6 @@ class MembersListPresenter(val view: MembersListView) {
     private val repository = MainApp.repository
     private var currentFilter = TeamMemberFilter()
     private var filterOpen = false
-    private var dataIsLoading = false
     private var members: List<TeamMemberEntity> = emptyList()
     private var skills: List<String> = emptyList()
     var projects: List<ProjectEntity> = emptyList()
