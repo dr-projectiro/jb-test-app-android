@@ -30,6 +30,8 @@
     <string name="no_manager">No manager</string>
     <string name="no_record">No record</string>
     <string name="no_project">No project</string>
+    <string name="not_assigned_to_project">Not assigned to project</string>
+    <string name="project_colon">Project: %s</string>
     <string name="confirm_project">Confirm project</string>
 
     <!--filter options-->

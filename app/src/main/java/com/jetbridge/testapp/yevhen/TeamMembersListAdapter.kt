@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.jetbridge.testapp.yevhen.databinding.ItemTeamMemberBinding
 import org.joda.time.DateTimeZone
@@ -38,7 +39,6 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         colorizeAvatar(viewHolder.binding.ivAvatar, teamMember)
         // bind working hours
         val isWorkingNow = isTeamMemberWorkingNow(teamMember.workingHours)
-
         viewHolder.binding.ivWorkingHours
             .setImageResource(if (isWorkingNow) R.drawable.ic_time else R.drawable.ic_time_off)
         viewHolder.binding.tvWorkingOrNotWorking
@@ -46,8 +46,24 @@ class TeamMembersListAdapter(private val data: List<TeamMemberEntity>,
         viewHolder.binding.tvWorkingOrNotWorking
             .setTextColor(ResourcesCompat.getColor(viewHolder.itemView.resources,
                 if (isWorkingNow) R.color.green_working_hours else R.color.red_not_working_hours, null))
+        // bind project header
+        val projectHeaderVisible = itemIndex == 0 || data[itemIndex - 1].currentProject?.id != teamMember.currentProject?.id
+        val projectSeparatorVisible = projectHeaderVisible && itemIndex != 0
 
-        viewHolder.binding.cntTeamMember.setOnClickListener {
+        viewHolder.binding.projectSeparator.visibility =
+            if (projectSeparatorVisible) View.VISIBLE else View.GONE
+        if (projectHeaderVisible) {
+            viewHolder.binding.tvProjectHeader.visibility = View.VISIBLE
+            viewHolder.binding.tvProjectHeader.text =
+                if (teamMember.currentProject != null)
+                    viewHolder.itemView.context
+                        .getString(R.string.project_colon, teamMember.currentProject!!.projectName)
+            else viewHolder.itemView.context.getString(R.string.no_project)
+        } else {
+            viewHolder.binding.tvProjectHeader.visibility = View.GONE
+        }
+
+        viewHolder.binding.viewItemClickDelegate.setOnClickListener {
             DetailedProfileActivity.start(viewHolder.itemView.context,
                 teamMember, projects)
         }

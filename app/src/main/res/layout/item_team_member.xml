@@ -5,8 +5,42 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cnt_team_member"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_grey_ripple">
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/project_separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@color/grey_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_project_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="start|center_vertical"
+            android:textColor="@color/grey_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_item_click_delegate"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_grey_ripple"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_project_header" />
 
         <ImageView
             android:id="@+id/iv_avatar"
@@ -18,7 +52,7 @@
             android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tv_project_header" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -55,9 +89,9 @@
             android:layout_width="@dimen/team_member_list_working_icon_size"
             android:layout_height="@dimen/team_member_list_working_icon_size"
             android:layout_marginEnd="@dimen/margin_small"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/iv_avatar" />
 
         <TextView
             android:id="@+id/tv_working_or_not_working"

@@ -80,7 +80,7 @@ class DetailedProfileActivity : AppCompatActivity() {
         } ?: getString(R.string.no_record)
 
         // free since
-        binding.tvFreeSince.text = teamMember.onHolidaysTillIsoDate?.let {
+        binding.tvFreeSince.text = teamMember.freeSinceIsoDate?.let {
             getString(R.string.free_since, LocalDateTime.parse(it).toString(PROFILE_DATE_FORMAT))
         } ?: getString(R.string.no_record)
 

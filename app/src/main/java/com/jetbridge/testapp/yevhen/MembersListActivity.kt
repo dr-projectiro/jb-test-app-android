@@ -62,8 +62,9 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
 
     class OnScrollSeparatorVisibilityHandler(val viewVisibleIfScrolled: View) : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            recyclerView.scrollY
-            viewVisibleIfScrolled.visibility = if (dy > 0) View.VISIBLE else View.INVISIBLE
+            viewVisibleIfScrolled.visibility =
+                if (recyclerView.computeVerticalScrollOffset() > 0) View.VISIBLE
+                else View.INVISIBLE
         }
     }
 
