@@ -69,6 +69,7 @@
             android:id="@+id/cnt_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_mid"
             android:visibility="gone">
 
             <View
@@ -85,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/skills_header"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/top_filter_separator" />
@@ -131,6 +133,7 @@
                 android:id="@+id/skill_to_project_separator"
                 style="@style/AppTheme.FilterSeparator"
                 android:layout_width="0dp"
+                android:layout_marginTop="@dimen/margin_mid"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_filter_skills" />
@@ -141,6 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/projects_header"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/skill_to_project_separator" />
@@ -149,6 +153,7 @@
                 android:id="@+id/rv_filter_projects"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/bubble_option_height"
+                android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_projects_header" />
@@ -157,6 +162,7 @@
                 android:id="@+id/projects_to_availability_separator"
                 style="@style/AppTheme.FilterSeparator"
                 android:layout_width="0dp"
+                android:layout_marginTop="@dimen/margin_mid"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_filter_projects" />
@@ -167,6 +173,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/availability_header"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/projects_to_availability_separator" />
