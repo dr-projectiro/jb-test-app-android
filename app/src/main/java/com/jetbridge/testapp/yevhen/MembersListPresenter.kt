@@ -15,9 +15,10 @@ class MembersListPresenter(val view: MembersListView) {
     private var currentFilter = TeamMemberFilter()
     private var filterOpen = false
     private var dataIsLoading = false
-    private var membersData: List<TeamMemberEntity> = emptyList()
-    private var projectsData: List<ProjectEntity> = emptyList()
-    private var skillsData: List<String> = emptyList()
+    private var members: List<TeamMemberEntity> = emptyList()
+    private var skills: List<String> = emptyList()
+    var projects: List<ProjectEntity> = emptyList()
+        private set
 
     fun start() {
         loadDataForFilter(currentFilter)
@@ -42,12 +43,12 @@ class MembersListPresenter(val view: MembersListView) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ collectedData ->
                 // trying to keep side effects in terminal monad operator only
-                val (membersData, skillsData, projectsData) = collectedData
-                this.membersData = membersData
-                this.projectsData = projectsData
-                this.skillsData = skillsData
+                val (members, skills, projects) = collectedData
+                this.members = members
+                this.projects = projects
+                this.skills = skills
                 view.setActionBarButtonsEnabled(true)
-                view.displayTeamMemberItems(membersData)
+                view.displayTeamMemberItems(members)
             },
                 { TODO("handle errors") })
     }
@@ -86,7 +87,7 @@ class MembersListPresenter(val view: MembersListView) {
 
     fun onFilterClick() {
         filterOpen = !filterOpen
-        if (filterOpen) view.displayFilter(currentFilter, skillsData, projectsData)
+        if (filterOpen) view.displayFilter(currentFilter, skills, projects)
         else view.hideFilter()
     }
 }

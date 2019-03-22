@@ -3,10 +3,13 @@
 
     <string name="appbar_header_team_members">Team members list</string>
     <string name="appbar_header_select_filter">Select filter</string>
+    <string name="appbar_header_profile">Profile</string>
 
-    <string name="skills_filter_header">Skills</string>
-    <string name="projects_filter_header">Projects</string>
-    <string name="availability_filter_header">Availability</string>
+    <string name="skills_header">Skills</string>
+    <string name="projects_header">Projects</string>
+    <string name="project_header">Project</string>
+    <string name="availability_header">Availability</string>
+    <string name="manager_header">Manager</string>
     <string name="filter_working_now">Working now</string>
     <string name="dont_filter_availability">Don\'t filter availability</string>
     <string name="filter_on_holidays_now">On holidays now</string>
@@ -21,4 +24,11 @@
     <string name="ending_in_hours_mins">ending in %$1s hours, %$1s mins</string>
     <string name="ending_in_mins">ending in %s mins</string>
 
+    <string name="assign_to_project">Assign to project…</string>
+    <string name="change_project">Change project…</string>
+    <string name="works_from_till_within_timezone">%s - %s, timezone: %s</string>
+    <string name="no_manager">No manager</string>
+    <string name="no_record">No record</string>
+    <string name="no_project">No project</string>
+    <string name="confirm_project">Confirm project</string>
 </resources>

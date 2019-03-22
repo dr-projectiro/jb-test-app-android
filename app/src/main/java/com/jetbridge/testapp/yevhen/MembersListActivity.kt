@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import com.jetbridge.testapp.yevhen.databinding.ActivityMembersListBinding
 import io.reactivex.Completable
@@ -30,7 +29,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         presenter = MembersListPresenter(this)
 
         binding.rvTeamMembers.layoutManager = LinearLayoutManager(this)
-        binding.rvTeamMembers.adapter = TeamMembersListAdapter(emptyList())
+        binding.rvTeamMembers.adapter = TeamMembersListAdapter(emptyList(), emptyList())
 
         // init animated drawables (switching state of filter actionbar button)
         tuneToCancel = AnimatedVectorDrawableCompat.create(this, R.drawable.anim_tune_to_cancel)
@@ -95,7 +94,7 @@ class MembersListActivity : AppCompatActivity(), MembersListView {
         binding.pbLoadingProgress.visibility = View.INVISIBLE
         binding.tvDataLoadingLabel.visibility = View.INVISIBLE
         binding.pbLoadingProgress.progress = 0
-        binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers)
+        binding.rvTeamMembers.adapter = TeamMembersListAdapter(teamMembers, presenter.projects)
         binding.containerRvTeamMembers.visibility = View.VISIBLE
     }
 

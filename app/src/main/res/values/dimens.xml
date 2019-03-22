@@ -13,4 +13,6 @@
 
     <dimen name="team_member_list_avatar_size">24dp</dimen>
     <dimen name="team_member_list_working_icon_size">12dp</dimen>
+
+    <dimen name="profile_activity_avatar_size">64dp</dimen>
 </resources>

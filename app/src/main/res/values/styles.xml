@@ -38,6 +38,12 @@
 
     <style name="AppTheme.FilterSeparator">
         <item name="android:background">@color/colorAccent</item>
+        <item name="android:layout_height">2dp</item>
+    </style>
+
+    <style name="AppTheme.ProfileSeparator">
+        <item name="android:background">@color/profile_grey_light</item>
         <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">@dimen/margin_mid</item>
     </style>
 </resources>

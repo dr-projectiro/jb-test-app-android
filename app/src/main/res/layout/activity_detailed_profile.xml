@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--appbar-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/appbar_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginTop="@dimen/appbar_height" />
+
+            <TextView
+                style="@style/AppTheme.AppbarHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:text="@string/appbar_header_profile"
+                app:layout_constraintBottom_toTopOf="@id/appbar_guideline"
+                app:layout_constraintStart_toEndOf="@id/btn_back"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="@dimen/appbar_button_size"
+                android:layout_height="@dimen/appbar_button_size"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/bg_button_ripple"
+                android:src="@drawable/ic_arrow_back"
+                app:layout_constraintBottom_toTopOf="@id/appbar_guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="@dimen/profile_activity_avatar_size"
+                android:layout_height="@dimen/profile_activity_avatar_size"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_mid"
+                android:layout_marginBottom="@dimen/margin_mid"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/appbar_guideline" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
+                app:layout_constraintStart_toEndOf="@id/iv_avatar"
+                app:layout_constraintTop_toTopOf="@id/iv_avatar" />
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/bg_below_shadow" />
+
+        <TextView
+            android:id="@+id/tv_skills_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/skills_header" />
+
+        <TextView
+            android:id="@+id/tv_skills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/skill_to_manager_separator"
+            style="@style/AppTheme.ProfileSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_mid" />
+
+        <TextView
+            android:id="@+id/tv_manager_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/manager_header" />
+
+        <TextView
+            android:id="@+id/tv_manager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/manager_to_project_separator"
+            style="@style/AppTheme.ProfileSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_mid" />
+
+        <TextView
+            android:id="@+id/tv_project_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/project_header" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cnt_project_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_current_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_change_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/assign_to_project"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_current_project" />
+
+            <Button
+                android:id="@+id/btn_confirm_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/confirm_project"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/btn_change_project"
+                app:layout_constraintTop_toBottomOf="@id/tv_current_project" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_projects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/project_to_availability_separator"
+            style="@style/AppTheme.ProfileSeparator"
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/margin_mid" />
+
+        <TextView
+            android:id="@+id/tv_availability_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_mid"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:text="@string/availability_header" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_small"
+                android:src="@drawable/ic_time_grey"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@id/iv_time"
+                app:layout_constraintStart_toEndOf="@id/iv_time"
+                app:layout_constraintTop_toTopOf="@id/iv_time" />
+
+            <ImageView
+                android:id="@+id/iv_holidays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_mid"
+                android:src="@drawable/ic_holidays"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_time" />
+
+            <TextView
+                android:id="@+id/tv_holidays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@id/iv_holidays"
+                app:layout_constraintStart_toEndOf="@id/iv_holidays"
+                app:layout_constraintTop_toTopOf="@id/iv_holidays" />
+
+            <ImageView
+                android:id="@+id/iv_free_since"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_mid"
+                android:layout_marginTop="@dimen/margin_mid"
+                android:src="@drawable/ic_free_since"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_holidays" />
+
+            <TextView
+                android:id="@+id/tv_free_since"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_constraintBottom_toBottomOf="@id/iv_free_since"
+                app:layout_constraintStart_toEndOf="@id/iv_free_since"
+                app:layout_constraintTop_toTopOf="@id/iv_free_since" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</layout>

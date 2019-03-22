@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/cnt_team_member"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
